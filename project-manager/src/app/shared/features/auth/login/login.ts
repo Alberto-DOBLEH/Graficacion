@@ -66,7 +66,7 @@ export class Login implements OnInit {
         this.cargando = false;
         alert(`¡Bienvenido de nuevo, ${usuario.nombre || 'Usuario'}!`);
         this.closeModal.emit();
-        this.router.navigate(['/projects']);
+        this.router.navigate(['/app/inicio']);
       },
       error: (err) => {
         console.error('❌ Error de login', err);

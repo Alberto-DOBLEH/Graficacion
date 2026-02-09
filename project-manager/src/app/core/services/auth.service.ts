@@ -38,9 +38,7 @@ export class AuthService {
 
       return of(MOCK_USER).pipe(delay(1500));
     } else {
-      return throwError(
-        () => new Error('Credenciales incorrectas (Prueba: admin@gmail.com / 123)'),
-      ).pipe(delay(1500));
+      return throwError(() => new Error('Credenciales incorrectas')).pipe(delay(1500));
     }
   }
 
