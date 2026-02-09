@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,14 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class Login implements OnInit {
   private router = inject(Router);
+  private authService = inject(AuthService);
+
+  @Output() closeModal = new EventEmitter<void>();
 
   email: string = '';
   password: string = '';
-
   cargando: boolean = false;
   error: string = '';
-
   emailError: string = '';
 
   ngOnInit() {
@@ -56,24 +58,33 @@ export class Login implements OnInit {
       return;
     }
 
-    if (this.emailError) {
-      this.error = 'Por favor, corrige el correo electrónico.';
-      return;
-    }
-
-    console.log('📤 Conectando con servidor...', { email: this.email, password: this.password });
     this.cargando = true;
 
-    setTimeout(() => {
-      this.cargando = false;
-
-      if (this.email.includes('@')) {
-        console.log('✅ Login exitoso');
-
+    this.authService.login(this.email, this.password).subscribe({
+      next: (usuario) => {
+        console.log('✅ Login exitoso', usuario);
+        this.cargando = false;
+        alert(`¡Bienvenido de nuevo, ${usuario.nombre || 'Usuario'}!`);
+        this.closeModal.emit();
         this.router.navigate(['/projects']);
-      } else {
-        this.error = 'Credenciales incorrectas. Intenta de nuevo.';
-      }
-    }, 2000);
+      },
+      error: (err) => {
+        console.error('❌ Error de login', err);
+        this.cargando = false;
+        this.error = err.message || 'Error al iniciar sesión';
+      },
+    });
+  }
+
+  crearUsuarioDePrueba() {
+    const usuarioTest = {
+      email: 'admin@gmail.com',
+      password: '123',
+      nombre: 'Admin',
+    };
+
+    const key = 'project_manager_users';
+    localStorage.setItem(key, JSON.stringify([usuarioTest]));
+    console.log('Usuario de prueba creado: admin@gmail.com / 123');
   }
 }

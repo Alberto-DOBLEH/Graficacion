@@ -24,15 +24,23 @@ export class AuthService {
   }
 
   login(email: string, pass: string): Observable<any> {
-    const usuarios = this.obtenerUsuarios();
+    const MOCK_USER = {
+      id: 1,
+      nombre: 'Administrador',
+      email: 'admin@gmail.com',
+      password: '12345678',
+      role: 'admin',
+      token: 'fake-jwt-token-12345',
+    };
 
-    const usuario = usuarios.find((u: any) => u.email === email && u.password === pass);
+    if (email === MOCK_USER.email && pass === MOCK_USER.password) {
+      this.guardarSesion(MOCK_USER);
 
-    if (usuario) {
-      this.guardarSesion(usuario);
-      return of(usuario).pipe(delay(1500));
+      return of(MOCK_USER).pipe(delay(1500));
     } else {
-      return throwError(() => new Error('Credenciales incorrectas')).pipe(delay(1500));
+      return throwError(
+        () => new Error('Credenciales incorrectas (Prueba: admin@gmail.com / 123)'),
+      ).pipe(delay(1500));
     }
   }
 
