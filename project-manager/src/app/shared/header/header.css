@@ -1,4 +1,3 @@
-/* El contenedor fijo arriba */
 .header {
   position: fixed;
   top: 0;
@@ -8,12 +7,12 @@
   z-index: 1000;
   transition: all 0.3s ease;
   border-bottom: 1px solid transparent;
+  z-index: 9999;
 }
 
-/* Clase que Angular activa al hacer scroll */
 .header.scrolled {
   background-color: var(--color-glass);
-  backdrop-filter: blur(12px); /* EFECTO VIDRIO */
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
@@ -80,7 +79,7 @@
   border-radius: 50px;
   font-weight: 700;
   font-size: 0.9rem;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); /* Glow */
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
   transition: transform 0.2s;
 }
 .btn-register:hover {

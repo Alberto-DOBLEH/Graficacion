@@ -1,25 +1,29 @@
 <section class="hero-section">
   <div class="video-container">
-    <video autoplay muted loop playsinline class="bg-video">
-      <source
-        src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4"
-        type="video/mp4"
-      />
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      class="bg-video"
+      oncanplay="this.play()"
+      onloadedmetadata="this.muted = true"
+    >
+      <source src="assets/videos/VideoPrincipal.mp4" type="video/mp4" />
     </video>
     <div class="overlay"></div>
   </div>
 
   <div class="hero-content">
     <h1 class="hero-title">
-      Ingeniería de Software <br />
+      Project Manager <br />
       <span class="underline-tech">Profesional y Trazable</span>
     </h1>
 
     <p class="hero-subtitle">Gestión integral de Requisitos, Stakeholders y Ciclo de Vida.</p>
-
-    <div class="search-box">
-      <input type="text" placeholder="Buscar proyecto por ID o Cliente..." class="search-input" />
-      <button class="search-btn">BUSCAR</button>
-    </div>
   </div>
+
+  <section>
+    <p>Aqui va el cuerpo de la landing page</p>
+  </section>
 </section>
