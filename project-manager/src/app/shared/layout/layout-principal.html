@@ -1,25 +1,65 @@
-<!-- Menuuuuuu -->
 <div class="layout-wrapper">
-  <aside class="sidebar">
+  <aside class="sidebar" [class.collapsed]="isCollapsed">
+    <div class="sidebar-header">
+      <div class="brand" *ngIf="!isCollapsed">
+        <h2>ProjectManager</h2>
+      </div>
+
+      <button class="btn-alternar" (click)="alternarSidebar()">
+        <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+      </button>
+    </div>
+
     <nav class="menu">
-      <a routerLink="/app/inicio" routerLinkActive="active"> Inicio</a>
+      <a routerLink="/app/inicio" routerLinkActive="active" title="Inicio">
+        <mat-icon>home</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Inicio</span>
+      </a>
 
-      <div class="separator">PROYECTOS</div>
-      <a routerLink="/app/proyectos" routerLinkActive="active"> Lista de proyectos</a>
-      <a routerLink="/app/crear-proyecto" routerLinkActive="active"> Crear proyecto</a>
-      <a routerLink="/app/configuracion" routerLinkActive="active"> Configuración</a>
+      <div class="separador" *ngIf="!isCollapsed">PROYECTOS</div>
+      <a routerLink="/app/proyectos" routerLinkActive="active" title="Lista de proyectos">
+        <mat-icon>folder</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Lista de proyectos</span>
+      </a>
+      <a routerLink="/app/crear-proyecto" routerLinkActive="active" title="Crear proyecto">
+        <mat-icon>add_circle</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Crear proyecto</span>
+      </a>
+      <a routerLink="/app/configuracion" routerLinkActive="active" title="Configuración">
+        <mat-icon>settings</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Configuración</span>
+      </a>
 
-      <div class="separator">GESTIÓN</div>
-      <a routerLink="/app/roles" routerLinkActive="active">Roles</a>
-      <a routerLink="/app/interesados" routerLinkActive="active"> Stakeholders</a>
+      <div class="separador" *ngIf="!isCollapsed">GESTIÓN</div>
+      <a routerLink="/app/roles" routerLinkActive="active" title="Roles">
+        <mat-icon>group</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Roles</span>
+      </a>
+      <a routerLink="/app/interesados" routerLinkActive="active" title="Stakeholders">
+        <mat-icon>handshake</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Stakeholders</span>
+      </a>
 
-      <div class="separator">METODOLOGÍA</div>
-      <a routerLink="/app/procesos" routerLinkActive="active"> Procesos P.</a>
-      <a routerLink="/app/subprocesos" routerLinkActive="active">abc Subprocesos</a>
-      <a routerLink="/app/tecnicas" routerLinkActive="active"> Técnicas</a>
+      <div class="separador" *ngIf="!isCollapsed">METODOLOGÍA</div>
+      <a routerLink="/app/procesos" routerLinkActive="active" title="Procesos">
+        <mat-icon>sync</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Procesos P.</span>
+      </a>
+      <a routerLink="/app/subprocesos" routerLinkActive="active" title="Subprocesos">
+        <mat-icon>account_tree</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Subprocesos</span>
+      </a>
+      <a routerLink="/app/tecnicas" routerLinkActive="active" title="Técnicas">
+        <mat-icon>build</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Técnicas</span>
+      </a>
 
-      <div class="separator">SESIÓN</div>
-      <a routerLink="/login" class="logout"> Salir</a>
+      <div class="spacer"></div>
+      <div class="separador" *ngIf="!isCollapsed">SESIÓN</div>
+      <a routerLink="/login" class="logout" title="Salir">
+        <mat-icon>logout</mat-icon>
+        <span class="text" *ngIf="!isCollapsed">Salir</span>
+      </a>
     </nav>
   </aside>
 
