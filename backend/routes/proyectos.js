@@ -18,13 +18,13 @@ const getProyectos = (request, response) => {
 app.route("/proyecto").get(getProyectos);
 
 const agregarProyecto = (request, response) => {
-    const {nombre, descripcion} =request.body;
+    const {nombre, descripcion} = request.body;
     connection.query("INSERT INTO proyecto(nombre, descripcion) VALUE (?,?) ",
     [nombre, descripcion],
     (error, results) => {
         if(error)
             throw error;
-    response.status(201).json({"Proyecto agreagado":results.affectedRows});
+    response.status(201).json({"Proyecto agregado":results.affectedRows});
     });
 };
 
