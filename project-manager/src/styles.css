@@ -1,0 +1,28 @@
+/* src/styles.css */
+
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-dark-bg: #0f172a;
+  --color-glass: rgba(15, 23, 42, 0.85);
+  --color-text-white: #ffffff;
+  --color-text-muted: #cbd5e1;
+
+  --shadow-glow: 0 0 15px rgba(37, 99, 235, 0.5);
+  --shadow-chunky: 0 4px 0 #1e40af;
+
+  --font-main: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--color-dark-bg);
+  color: var(--color-text-white);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

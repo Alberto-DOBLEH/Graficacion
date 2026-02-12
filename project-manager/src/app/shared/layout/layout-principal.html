@@ -1,0 +1,29 @@
+<!-- Menuuuuuu -->
+<div class="layout-wrapper">
+  <aside class="sidebar">
+    <nav class="menu">
+      <a routerLink="/app/inicio" routerLinkActive="active"> Inicio</a>
+
+      <div class="separator">PROYECTOS</div>
+      <a routerLink="/app/proyectos" routerLinkActive="active"> Lista de proyectos</a>
+      <a routerLink="/app/crear-proyecto" routerLinkActive="active"> Crear proyecto</a>
+      <a routerLink="/app/configuracion" routerLinkActive="active"> Configuración</a>
+
+      <div class="separator">GESTIÓN</div>
+      <a routerLink="/app/roles" routerLinkActive="active">Roles</a>
+      <a routerLink="/app/interesados" routerLinkActive="active"> Stakeholders</a>
+
+      <div class="separator">METODOLOGÍA</div>
+      <a routerLink="/app/procesos" routerLinkActive="active"> Procesos P.</a>
+      <a routerLink="/app/subprocesos" routerLinkActive="active">abc Subprocesos</a>
+      <a routerLink="/app/tecnicas" routerLinkActive="active"> Técnicas</a>
+
+      <div class="separator">SESIÓN</div>
+      <a routerLink="/login" class="logout"> Salir</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
