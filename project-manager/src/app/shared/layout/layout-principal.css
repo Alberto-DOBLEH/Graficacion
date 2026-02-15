@@ -1,3 +1,7 @@
+.root {
+  --header-height: 120px;
+}
+
 .layout-wrapper {
   display: flex;
   height: 100vh;
@@ -5,6 +9,8 @@
 }
 
 .sidebar {
+  height: calc(100vh - var(--header-height));
+  margin-top: var(--header-height);
   width: 260px;
   background-color: #051b2c;
   color: white;
@@ -12,6 +18,15 @@
   flex-direction: column;
   padding: 1.5rem;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition:
+    width 0.3s ease,
+    padding 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+  padding: 1.5rem 0.5rem;
 }
 
 .brand h2 {
@@ -20,6 +35,33 @@
   font-size: 1.5rem;
   text-align: center;
   font-weight: bold;
+  transition: opacity 0.3s;
+}
+
+.sidebar.collapsed .brand h2 {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+}
+
+.btn-contenedor {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-alternar {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.btn-alternar:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .menu {
@@ -37,17 +79,29 @@
   font-size: 0.95rem;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
+  position: relative;
+  border-left: 4px solid transparent;
 }
 
 .menu a:hover,
 .menu a.active {
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
-  border-left: 4px solid #00e676;
 }
 
-.separator {
+.sidebar:not(.collapsed) .menu a:hover,
+.sidebar:not(.collapsed) .menu a.active {
+  border-left-color: #00e676;
+}
+
+.sidebar.collapsed .menu a {
+  border-left-color: transparent !important;
+  justify-content: center;
+  padding: 12px 8px;
+}
+
+.separador {
   margin-top: 20px;
   margin-bottom: 5px;
   font-size: 0.75rem;
@@ -56,6 +110,16 @@
   letter-spacing: 1px;
   font-weight: bold;
   padding-left: 10px;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .separador {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .logout {
@@ -72,4 +136,33 @@
   padding: 2.5rem;
   background-color: #f4f6f8;
   overflow-y: auto;
+}
+
+mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.btn-alternar mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.sidebar.collapsed .text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.text {
+  transition:
+    opacity 0.3s,
+    width 0.3s;
+  white-space: nowrap;
 }
