@@ -25,5 +25,18 @@
 
   <section>
     <p>Aqui va el cuerpo de la landing page</p>
+    <section>
+  <h2>Proyectos</h2>
+
+  <div *ngIf="proyectos.length === 0">
+    No hay proyectos todavía.
+  </div>
+
+  <ul *ngIf="proyectos.length > 0">
+    <li *ngFor="let p of proyectos">
+      <strong>{{ p.nombre }}</strong> - {{ p.descripcion }}
+    </li>
+  </ul>
+</section>
   </section>
 </section>
