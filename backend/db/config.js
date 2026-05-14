@@ -1,18 +1,25 @@
-const dotenv = require("dotenv");
-dotenv.config();
-
 const mysql = require('mysql');
-let connection;
+require('dotenv').config(); // Cargamos las variables del archivo .env
 
-try {
-    connection = mysql.createConnection( {
-        host: process.env.DBHOST,
-        user: process.env.DBUSER,
-        password: process.env.DBPASS,
-        database: process.env.DBNAME
-    });
-} catch (error) {
-    console.log("Error al conectar con la base de datos")
-}
+// Creamos un "Pool" de conexiones
+const db = mysql.createPool({
+    connectionLimit: 10, // Máximo de conexiones simultáneas
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
 
-module.exports = {connection};
+// Probamos la conexión al iniciar
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error('❌ Error al conectar a la Base de Datos:', err.message);
+        return;
+    }
+    if (connection) {
+        connection.release(); // Liberamos la conexión de prueba
+        console.log('✅ Base de datos MySQL conectada exitosamente');
+    }
+});
+
+module.exports = db;
