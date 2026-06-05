@@ -1,0 +1,117 @@
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 0.5rem 2rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #333;
+}
+
+/* ── Breadcrumb ─────────────────────────── */
+.breadcrumb { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; }
+.breadcrumb a { color: #1565c0; }
+.breadcrumb a:hover { text-decoration: underline; }
+.sep { margin: 0 0.5rem; color: #999; }
+
+/* ── Page Header ────────────────────────── */
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.header-left { display: flex; align-items: center; gap: 1rem; }
+.header-icon-box {
+  width: 56px; height: 56px;
+  background: #ec4899;
+  border-radius: 14px; display: flex; justify-content: center; align-items: center;
+  color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.page-title { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0; }
+.page-subtitle { font-size: 0.9rem; color: #666; margin: 0.25rem 0 0; }
+
+/* ── Diagram Grid ───────────────────────── */
+.diagrama-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.diagrama-card {
+  background: white; border: 2px solid #e5e7eb; border-radius: 12px;
+  padding: 1rem; text-align: center; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+}
+.diagrama-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+.diagrama-card.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, white);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.diagrama-nombre { font-size: 0.85rem; font-weight: 700; color: #333; }
+.diagrama-desc { font-size: 0.7rem; color: #888; }
+
+/* ── Render Area ────────────────────────── */
+.render-area {
+  background: white; border: 1px solid #e5e7eb; border-radius: 14px;
+  overflow: hidden; margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.render-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.5rem; border-bottom: 1px solid #f0f0f0;
+}
+.render-title { display: flex; align-items: center; gap: 0.6rem; }
+.render-title h2 { margin: 0; font-size: 1.15rem; font-weight: 700; color: #1a1a2e; }
+.render-badge {
+  font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+}
+
+.btn-copiar {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #f4f4f5; border: 1px solid #ddd; border-radius: 8px;
+  padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: 600;
+  color: #555; cursor: pointer;
+}
+.btn-copiar:hover { background: #e9e9eb; color: #333; }
+
+.render-body {
+  padding: 2rem; min-height: 300px; display: flex;
+  justify-content: center; align-items: center;
+  overflow-x: auto;
+}
+.mermaid-container { width: 100%; text-align: center; }
+.mermaid-container svg { max-width: 100%; height: auto; }
+
+.loading-placeholder {
+  text-align: center; color: #aaa;
+}
+.loading-placeholder p { margin: 0.5rem 0 0; font-size: 0.9rem; }
+
+/* ── Code Section ───────────────────────── */
+.code-section { border-top: 1px solid #f0f0f0; }
+.code-header {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0.6rem 1.5rem; background: #fafafa;
+  font-size: 0.8rem; color: #888; font-weight: 600;
+}
+.code-block {
+  margin: 0; padding: 1rem 1.5rem;
+  background: #1e1e2e; color: #cdd6f4;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  font-size: 0.82rem; line-height: 1.7;
+  overflow-x: auto; white-space: pre-wrap;
+  max-height: 250px; overflow-y: auto;
+}
+
+/* ── Info Note ──────────────────────────── */
+.info-note {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  background: #f0f4ff; border: 1px solid #dbeafe; border-radius: 10px;
+  padding: 1rem 1.2rem;
+}
+.info-note p { margin: 0; font-size: 0.85rem; color: #555; line-height: 1.5; }
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 800px) {
+  .diagrama-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .diagrama-grid { grid-template-columns: 1fr; }
+}

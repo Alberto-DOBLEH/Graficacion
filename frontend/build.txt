@@ -1,0 +1,37 @@
+
+> project-manager@0.0.0 build
+> ng build
+
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mmain-A5W7626T.js[39m   [2m | [22m[2mmain[22m         [2m | [22m[36m170.12 kB[39m[2m | [22m               [36m41.32 kB[39m
+[32mchunk-WZVTQXPY.js[39m  [2m | [22m[2m-[22m            [2m | [22m[36m137.15 kB[39m[2m | [22m               [36m41.29 kB[39m
+[32mstyles-HE4FJD3Z.css[39m[2m | [22m[2mstyles[22m       [2m | [22m [36m93.41 kB[39m[2m | [22m               [36m11.95 kB[39m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m[2m | [22m[1m400.69 kB[22m[2m | [22m               [1m94.55 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-2P45ROWK.js[39m  [2m | [22m[2minicio[22m       [2m | [22m[36m300 bytes[39m[2m | [22m              [36m300 bytes[39m
+
+Application bundle generation complete. [22.964 seconds] - 2026-04-04T01:38:16.185Z
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: Footer is not used within the template of App[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.ts:7:34:
+[37m      7 │   imports: [RouterOutlet, Header, [32mFooter[37m],
+        ╵                                   [32m~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m"heigth" is not a known CSS property[0m [unsupported-css-property]
+
+    src/styles.css:27:2:
+[37m      27 │   [32mheigth[37m: 100%;
+         │   [32m~~~~~~[37m
+         ╵   [32mheight[0m
+
+  Did you mean "height" instead?
+
+[39m[22m
+Output location: C:\Users\guill\OneDrive\Escritorio\Graficacion\project-manager\dist\project-manager
+

@@ -1,0 +1,79 @@
+<div class="page-container">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/app/proyectos"><mat-icon style="vertical-align: middle; font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">folder</mat-icon> Proyectos</a>
+    <span class="sep">›</span>
+    <a [routerLink]="['/app/proyecto', proyectoId]">{{ proyecto?.nombre }}</a>
+    <span class="sep">›</span>
+    <span>Diagramas</span>
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-icon-box">
+        <mat-icon style="font-size: 2.2rem; width: 2.2rem; height: 2.2rem;">schema</mat-icon>
+      </div>
+      <div>
+        <h1 class="page-title">Generador de Diagramas</h1>
+        <p class="page-subtitle">Diagramas generados automáticamente a partir de los requerimientos y técnicas de <strong>{{ proyecto?.nombre }}</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diagram Selector Grid -->
+  <div class="diagrama-grid">
+    <div
+      class="diagrama-card"
+      *ngFor="let d of diagramas"
+      [class.active]="diagramaActual === d.key"
+      [style.--accent]="d.color"
+      (click)="seleccionarDiagrama(d.key)"
+    >
+      <mat-icon [style.color]="d.color" style="font-size: 1.8rem; width: 1.8rem; height: 1.8rem;">{{ d.icono }}</mat-icon>
+      <span class="diagrama-nombre">{{ d.nombre }}</span>
+      <span class="diagrama-desc">{{ d.descripcion }}</span>
+    </div>
+  </div>
+
+  <!-- Diagram Render Area -->
+  <div class="render-area">
+    <div class="render-header">
+      <div class="render-title">
+        <mat-icon [style.color]="getDiagramaInfo().color" style="font-size: 1.4rem; width: 1.4rem; height: 1.4rem;">{{ getDiagramaInfo().icono }}</mat-icon>
+        <h2>{{ getDiagramaInfo().nombre }}</h2>
+        <span class="render-badge" [style.background]="getDiagramaInfo().color + '22'" [style.color]="getDiagramaInfo().color">
+          {{ requerimientos.length }} requerimientos
+        </span>
+      </div>
+      <button class="btn-copiar" (click)="copiarCodigo()" title="Copiar código Mermaid">
+        <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">content_copy</mat-icon>
+        Copiar código
+      </button>
+    </div>
+
+    <div class="render-body">
+      <div id="mermaid-render" class="mermaid-container">
+        <div class="loading-placeholder" *ngIf="!mermaidCargado">
+          <mat-icon style="font-size: 2.5rem; width: 2.5rem; height: 2.5rem; color: #ccc;">hourglass_empty</mat-icon>
+          <p>Cargando motor de diagramas...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mermaid Source Code -->
+    <div class="code-section">
+      <div class="code-header">
+        <mat-icon style="font-size: 1rem; width: 1rem; height: 1rem; color: #888;">code</mat-icon>
+        <span>Código Mermaid</span>
+      </div>
+      <pre class="code-block">{{ codigoMermaid }}</pre>
+    </div>
+  </div>
+
+  <!-- Info Note -->
+  <div class="info-note">
+    <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem; color: #6366f1;">info</mat-icon>
+    <p>Los diagramas se generan automáticamente a partir de los <strong>requerimientos funcionales</strong>, <strong>casos de uso</strong> y <strong>módulos</strong> que hayas registrado. Agrega más datos para diagramas más completos.</p>
+  </div>
+</div>

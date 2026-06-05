@@ -1,0 +1,89 @@
+.root {
+  --header-height: 80px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.layout-wrapper {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar {
+  height: 100vh;
+  margin-top: 0;
+  width: 260px;
+  background-color: #0f172a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.brand h2 {
+  margin: 0 0 2rem 0;
+  color: #3b82f6;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #b0bec5;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  border-left: 4px solid transparent;
+}
+
+.menu a:hover,
+.menu a.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-left-color: #3b82f6;
+}
+
+.logout {
+  margin-top: auto;
+  color: #ff5252 !important;
+}
+
+.logout:hover {
+  background-color: rgba(255, 82, 82, 0.1) !important;
+}
+
+.content {
+  flex: 1;
+  padding: 2.5rem;
+  background-color: #f4f6f8;
+  overflow-y: auto;
+}
+
+mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.text {
+  white-space: nowrap;
+}

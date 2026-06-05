@@ -1,0 +1,37 @@
+<div class="layout-wrapper">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <h2>ProjectManager</h2>
+      </div>
+    </div>
+
+    <nav class="menu">
+      <a routerLink="/app/inicio" routerLinkActive="active" title="Inicio">
+        <mat-icon>home</mat-icon>
+        <span class="text">Inicio</span>
+      </a>
+
+      <a routerLink="/app/proyectos" routerLinkActive="active" title="Proyectos">
+        <mat-icon>folder</mat-icon>
+        <span class="text">Proyectos</span>
+      </a>
+
+      <a routerLink="/app/crear-proyecto" routerLinkActive="active" title="Crear proyecto">
+        <mat-icon>add_circle</mat-icon>
+        <span class="text">Crear proyecto</span>
+      </a>
+
+      <div class="spacer"></div>
+
+      <a routerLink="/login" class="logout" title="Salir">
+        <mat-icon>logout</mat-icon>
+        <span class="text">Salir</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

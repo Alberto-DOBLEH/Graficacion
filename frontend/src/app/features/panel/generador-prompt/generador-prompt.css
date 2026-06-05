@@ -1,0 +1,95 @@
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 0.5rem 2rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #333;
+}
+
+/* ── Breadcrumb ─────────────────────────── */
+.breadcrumb { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; }
+.breadcrumb a { color: #1565c0; }
+.breadcrumb a:hover { text-decoration: underline; }
+.sep { margin: 0 0.5rem; color: #999; }
+
+/* ── Page Header ────────────────────────── */
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.header-left { display: flex; align-items: center; gap: 1rem; }
+.header-icon-box {
+  width: 56px; height: 56px;
+  background: #f59e0b;
+  border-radius: 14px; display: flex; justify-content: center; align-items: center;
+  color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.page-title { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0; }
+.page-subtitle { font-size: 0.9rem; color: #666; margin: 0.25rem 0 0; }
+
+/* ── Stats Grid ─────────────────────────── */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.stat-mini {
+  background: white; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 0.9rem; text-align: center;
+  border-bottom: 3px solid var(--accent);
+}
+.stat-mini:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+.stat-val { display: block; font-size: 1.8rem; font-weight: 800; color: var(--accent); line-height: 1; }
+.stat-lbl { display: block; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px; }
+
+/* ── Action Bar ─────────────────────────── */
+.action-bar { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
+.btn-action {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 0.7rem 1.3rem; border: none; border-radius: 10px;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.btn-action:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.btn-copiar { background: #6366f1; color: white; }
+.btn-descargar { background: #10b981; color: white; }
+
+/* ── Prompt Area ────────────────────────── */
+.prompt-area {
+  background: white; border: 1px solid #e5e7eb; border-radius: 14px;
+  overflow: hidden; margin-bottom: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.prompt-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.5rem; border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+.prompt-title { display: flex; align-items: center; gap: 0.5rem; }
+.prompt-title h2 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #1a1a2e; }
+.prompt-chars { font-size: 0.78rem; color: #888; background: #f0f0f0; padding: 0.2rem 0.6rem; border-radius: 50px; }
+
+.prompt-output {
+  margin: 0; padding: 1.5rem;
+  background: #0f0f23; color: #e2e8f0;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  font-size: 0.82rem; line-height: 1.7;
+  overflow-x: auto; white-space: pre-wrap;
+  max-height: 600px; overflow-y: auto;
+}
+
+/* Custom scrollbar for prompt */
+.prompt-output::-webkit-scrollbar { width: 8px; }
+.prompt-output::-webkit-scrollbar-track { background: #1a1a33; }
+.prompt-output::-webkit-scrollbar-thumb { background: #4a4a6a; border-radius: 4px; }
+
+/* ── Tips ────────────────────────────────── */
+.tips-section {
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+}
+.tips-section h3 { margin: 0 0 0.7rem; font-size: 1rem; color: #166534; }
+.tips-section ul { margin: 0; padding-left: 1.2rem; }
+.tips-section li { font-size: 0.85rem; color: #555; line-height: 1.8; }
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 700px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .action-bar { flex-direction: column; }
+}

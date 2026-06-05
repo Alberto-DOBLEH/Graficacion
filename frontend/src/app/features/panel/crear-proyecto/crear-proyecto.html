@@ -1,0 +1,85 @@
+<div class="page-container">
+  <div class="page-header">
+    <a routerLink="/app/proyectos" class="btn-volver"><mat-icon style="vertical-align: middle; font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">arrow_back</mat-icon> Volver a proyectos</a>
+    <h1 class="page-title">Crear nuevo proyecto</h1>
+    <p class="page-subtitle">Define los datos base de tu proyecto de ingeniería de requisitos</p>
+  </div>
+
+  <div class="form-card">
+    <form (ngSubmit)="onGuardar()" #formRef="ngForm">
+
+      <div class="form-group">
+        <label for="nombre">Nombre del proyecto <span class="req">*</span></label>
+        <input
+          id="nombre"
+          type="text"
+          [(ngModel)]="nombre"
+          name="nombre"
+          placeholder="Ej: Sistema de Inventario v2"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          [(ngModel)]="descripcion"
+          name="descripcion"
+          rows="3"
+          placeholder="¿Qué problema resuelve este proyecto?"
+        ></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="metodologia">Metodología</label>
+          <select id="metodologia" [(ngModel)]="metodologia" name="metodologia">
+            <option *ngFor="let m of metodologias" [value]="m">{{ m }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fechaInicio">Fecha de inicio</label>
+          <input
+            id="fechaInicio"
+            type="date"
+            [(ngModel)]="fechaInicio"
+            name="fechaInicio"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Estado inicial</label>
+        <div class="radio-group">
+          <label class="radio-option" [class.selected]="estado === 'activo'">
+            <input type="radio" [(ngModel)]="estado" name="estado" value="activo" />
+            <span class="radio-dot activo"></span>
+            Activo
+          </label>
+          <label class="radio-option" [class.selected]="estado === 'pausado'">
+            <input type="radio" [(ngModel)]="estado" name="estado" value="pausado" />
+            <span class="radio-dot pausado"></span>
+            Pausado
+          </label>
+          <label class="radio-option" [class.selected]="estado === 'completado'">
+            <input type="radio" [(ngModel)]="estado" name="estado" value="completado" />
+            <span class="radio-dot completado"></span>
+            Completado
+          </label>
+        </div>
+      </div>
+
+      <p class="error-msg" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+      <div class="form-actions">
+        <a routerLink="/app/proyectos" class="btn-cancelar">Cancelar</a>
+        <button type="submit" class="btn-guardar" [disabled]="guardando">
+          <mat-icon *ngIf="!guardando" style="vertical-align: middle; font-size: 1.2rem; width: 1.2rem; height: 1.2rem; margin-right: 4px;">check</mat-icon>
+          {{ guardando ? 'Guardando...' : 'Crear proyecto' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

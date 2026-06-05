@@ -1,0 +1,102 @@
+<div class="page-container" *ngIf="proyecto">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/app/proyectos"><mat-icon style="vertical-align: middle; font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">folder</mat-icon> Proyectos</a>
+    <span class="sep">›</span>
+    <span>{{ proyecto.nombre }}</span>
+  </div>
+
+  <!-- Header del proyecto -->
+  <div class="proyecto-header">
+    <div class="proyecto-info">
+      <div class="proyecto-icon"><mat-icon style="font-size: 2.5rem; width: 2.5rem; height: 2.5rem;">folder_open</mat-icon></div>
+      <div>
+        <div class="header-top">
+          <h1 class="proyecto-nombre">{{ proyecto.nombre }}</h1>
+          <span [class]="'badge ' + estadoBadgeClass(proyecto.estado)">
+            {{ estadoLabel(proyecto.estado) }}
+          </span>
+        </div>
+        <p class="proyecto-desc">{{ proyecto.descripcion || 'Sin descripción' }}</p>
+        <div class="proyecto-meta">
+          <span><mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">explore</mat-icon> {{ proyecto.metodologia }}</span>
+          <span><mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">calendar_today</mat-icon> Inicio: {{ proyecto.fechaInicio }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección técnicas -->
+  <div class="seccion-titulo">
+    <h2>Técnicas de Recopilación de Requisitos</h2>
+    <p>Selecciona una técnica para gestionar sus entradas</p>
+  </div>
+
+  <div class="tecnicas-grid">
+    <div
+      class="tecnica-card"
+      *ngFor="let t of tecnicas"
+      (click)="irATecnica(t.tipo)"
+      [style.--accent]="t.color"
+    >
+      <div class="tecnica-top">
+        <div class="tecnica-icon" [style.background]="t.color + '22'" [style.border-color]="t.color + '44'">
+          <mat-icon>{{ t.icono }}</mat-icon>
+        </div>
+        <div class="tecnica-count" [style.color]="t.color">
+          {{ contarEntradas(t.tipo) }}
+          <small>entradas</small>
+        </div>
+      </div>
+      <h3 class="tecnica-nombre" [style.color]="t.color">{{ t.nombre }}</h3>
+      <p class="tecnica-desc">{{ t.descripcion }}</p>
+      <div class="tecnica-footer">
+        <span class="tecnica-link" [style.color]="t.color">Ver entradas <mat-icon style="vertical-align: middle; font-size: 1.2em; width: 1.2em; height: 1.2em;">arrow_forward</mat-icon></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección Herramientas de Análisis -->
+  <div class="seccion-titulo" style="margin-top: 2.5rem;">
+    <h2>Herramientas de Análisis</h2>
+    <p>Gestiona requerimientos, genera diagramas y obtén el prompt final del proyecto</p>
+  </div>
+
+  <div class="herramientas-grid">
+    <!-- Requerimientos -->
+    <div class="herramienta-card" (click)="irARequerimientos()" style="--accent: #6366f1;">
+      <div class="herramienta-icon" style="background: #6366f1;">
+        <mat-icon style="font-size: 2rem; width: 2rem; height: 2rem;">assignment</mat-icon>
+      </div>
+      <h3>Requerimientos</h3>
+      <p>Gestiona requerimientos funcionales, no funcionales y reglas de negocio</p>
+      <span class="herramienta-link" style="color: #6366f1;">
+        Gestionar <mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">arrow_forward</mat-icon>
+      </span>
+    </div>
+
+    <!-- Diagramas -->
+    <div class="herramienta-card" (click)="irADiagramas()" style="--accent: #ec4899;">
+      <div class="herramienta-icon" style="background: #ec4899;">
+        <mat-icon style="font-size: 2rem; width: 2rem; height: 2rem;">schema</mat-icon>
+      </div>
+      <h3>Diagramas UML</h3>
+      <p>Genera automáticamente diagramas de casos de uso, clases, secuencia y más</p>
+      <span class="herramienta-link" style="color: #ec4899;">
+        Generar <mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">arrow_forward</mat-icon>
+      </span>
+    </div>
+
+    <!-- Prompt Final -->
+    <div class="herramienta-card" (click)="irAPrompt()" style="--accent: #f59e0b;">
+      <div class="herramienta-icon" style="background: #f59e0b;">
+        <mat-icon style="font-size: 2rem; width: 2rem; height: 2rem;">auto_awesome</mat-icon>
+      </div>
+      <h3>Super Mega Prompt</h3>
+      <p>Compila toda la información del proyecto en un prompt listo para usar con IA</p>
+      <span class="herramienta-link" style="color: #f59e0b;">
+        Generar Prompt <mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">arrow_forward</mat-icon>
+      </span>
+    </div>
+  </div>
+</div>

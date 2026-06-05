@@ -1,0 +1,150 @@
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0.5rem 2rem;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* ── Header ───────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 1rem;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-dark-bg);
+  margin: 0 0 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-icon { font-size: 1.8rem; width: 1.8rem; height: 1.8rem; }
+
+.page-subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ── Botón ──────────────────────────── */
+.btn-nuevo {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: bold;
+  padding: 0.7rem 1.4rem;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-nuevo:hover { background-color: var(--color-primary-dark); }
+
+/* ── Grid de cards ────────────────────────── */
+.proyectos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.proyecto-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.proyecto-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: #ccc;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.card-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* ── Badges ───────────────────────────────── */
+.badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.badge-activo { background: #e8f5e9; color: #2e7d32; }
+.badge-pausado { background: #fff8e1; color: #f57f17; }
+.badge-completado { background: #e3f2fd; color: #1565c0; }
+
+/* ── Textos Card ─────────────────────────────────── */
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin: 0 0 0.5rem;
+}
+
+.card-desc {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0 0 1rem;
+  flex: 1;
+}
+
+/* ── Footer Card ───────────────────────────────── */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.card-meta { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.meta-item {
+  font-size: 0.8rem;
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.card-arrow {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* ── Estado vacío ─────────────────────────── */
+.estado-vacio {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+  background: white;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+}
+
+.estado-vacio h3 { color: #333; margin-top: 1rem; }

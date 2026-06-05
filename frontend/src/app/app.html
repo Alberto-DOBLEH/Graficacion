@@ -1,0 +1,9 @@
+<div class="app-container">
+  <app-header *ngIf="isPublicRoute"></app-header>
+
+  <main class="main-content" [class.no-header]="!isPublicRoute">
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-footer *ngIf="isPublicRoute"></app-footer>
+</div>

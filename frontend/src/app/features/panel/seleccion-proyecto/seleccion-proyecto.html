@@ -1,0 +1,63 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">
+        <mat-icon class="title-icon">folder</mat-icon>
+        Mis Proyectos
+      </h1>
+      <p class="page-subtitle">Selecciona un proyecto para ver su panel de gestión de requisitos</p>
+    </div>
+    <a routerLink="/app/crear-proyecto" class="btn-nuevo">
+      <mat-icon class="btn-icon">add</mat-icon>
+      Nuevo Proyecto
+    </a>
+  </div>
+
+  <div class="proyectos-grid" *ngIf="proyectos.length > 0; else vacio">
+    <div
+      class="proyecto-card"
+      *ngFor="let p of proyectos"
+      (click)="abrirProyecto(p.id)"
+    >
+      <div class="card-top">
+        <div class="card-icon">
+          <mat-icon>folder_open</mat-icon>
+        </div>
+        <span [class]="'badge ' + estadoClase(p.estado)">
+          {{ estadoLabel(p.estado) }}
+        </span>
+      </div>
+
+      <div class="card-body">
+        <h2 class="card-title">{{ p.nombre }}</h2>
+        <p class="card-desc">{{ p.descripcion }}</p>
+      </div>
+
+      <div class="card-footer">
+        <div class="card-meta">
+          <span class="meta-item">
+            <mat-icon class="meta-icon">explore</mat-icon>
+            {{ p.metodologia }}
+          </span>
+          <span class="meta-item">
+            <mat-icon class="meta-icon">calendar_today</mat-icon>
+            {{ formatFecha(p.fechaInicio) }}
+          </span>
+        </div>
+        <mat-icon class="card-arrow">arrow_forward</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #vacio>
+    <div class="estado-vacio">
+      <mat-icon class="vacio-icon">assignment</mat-icon>
+      <h3>No hay proyectos aún</h3>
+      <p>Crea tu primer proyecto para comenzar a gestionar los requisitos</p>
+      <a routerLink="/app/crear-proyecto" class="btn-nuevo">
+        <mat-icon class="btn-icon">add</mat-icon>
+        Crear primer proyecto
+      </a>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,107 @@
+<div class="page-container">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/app/proyectos">Proyectos</a>
+    <span class="sep">›</span>
+    <a [routerLink]="['/app/proyecto', proyectoId]">{{ proyecto?.nombre }}</a>
+    <span class="sep">›</span>
+    <a [routerLink]="['/app/proyecto', proyectoId, 'tecnicas', tipo]" [style.color]="config.color">{{ config.nombre }}</a>
+    <span class="sep">›</span>
+    <span>Nueva entrada</span>
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-icon" [style.background]="config.color + '22'" [style.border-color]="config.color + '44'">
+      <mat-icon style="font-size: 2.5rem; width: 2.5rem; height: 2.5rem; line-height: 2.5rem;">{{ config.icono }}</mat-icon>
+    </div>
+    <div>
+      <h1 class="page-title"><span [style.color]="config.color">Nueva entrada:</span> {{ config.nombre }}</h1>
+      <p class="page-subtitle">Completa el formulario y guarda la entrada para este proyecto</p>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <div class="form-card">
+    <form (ngSubmit)="onGuardar()">
+
+      <!-- Título de la entrada (siempre primero) -->
+      <div class="form-group titulo-group">
+        <label for="titulo-entrada">
+          Título de la entrada <span class="req">*</span>
+        </label>
+        <input
+          id="titulo-entrada"
+          type="text"
+          [(ngModel)]="titulo"
+          name="titulo-entrada"
+          placeholder="Ej: Entrevista con gerente comercial – 05 Abr 2026"
+          [style.border-color]="config.color + '66'"
+        />
+      </div>
+
+      <div class="divisor">
+        <span>Campos específicos de {{ config.nombre }}</span>
+      </div>
+
+      <!-- Campos dinámicos -->
+      <div
+        *ngFor="let campo of campos"
+        class="form-group"
+      >
+        <label [for]="campo.key">
+          {{ campo.label }}
+          <span class="req" *ngIf="campo.requerido">*</span>
+        </label>
+
+        <input
+          *ngIf="campo.tipo === 'text' || campo.tipo === 'date' || campo.tipo === 'time'"
+          [id]="campo.key"
+          [type]="campo.tipo"
+          [(ngModel)]="datos[campo.key]"
+          [name]="campo.key"
+          [placeholder]="campo.placeholder || ''"
+        />
+
+        <textarea
+          *ngIf="campo.tipo === 'textarea'"
+          [id]="campo.key"
+          [(ngModel)]="datos[campo.key]"
+          [name]="campo.key"
+          rows="3"
+          [placeholder]="campo.placeholder || ''"
+        ></textarea>
+
+        <select
+          *ngIf="campo.tipo === 'select'"
+          [id]="campo.key"
+          [(ngModel)]="datos[campo.key]"
+          [name]="campo.key"
+        >
+          <option value="">— Seleccionar —</option>
+          <option *ngFor="let opt of campo.options" [value]="opt">{{ opt }}</option>
+        </select>
+      </div>
+
+      <p class="error-msg" *ngIf="errorMsg">
+        <mat-icon style="vertical-align: middle; font-size: 1.1rem; width: 1.1rem; height: 1.1rem; margin-right: 4px;">warning</mat-icon> 
+        {{ errorMsg }}
+      </p>
+
+      <!-- Acciones -->
+      <div class="form-actions">
+        <a [routerLink]="['/app/proyecto', proyectoId, 'tecnicas', tipo]" class="btn-cancelar">Cancelar</a>
+        <button
+          type="submit"
+          class="btn-guardar"
+          [disabled]="guardando"
+          [style.background]="config.color"
+        >
+          <mat-icon *ngIf="!guardando" style="vertical-align: middle; font-size: 1.2rem; width: 1.2rem; height: 1.2rem; margin-right: 4px;">check</mat-icon>
+          {{ guardando ? 'Guardando...' : 'Guardar entrada' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

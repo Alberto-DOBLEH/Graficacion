@@ -1,0 +1,182 @@
+<div class="page-container">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/app/proyectos"><mat-icon style="vertical-align: middle; font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">folder</mat-icon> Proyectos</a>
+    <span class="sep">›</span>
+    <a [routerLink]="['/app/proyecto', proyectoId]">{{ proyecto?.nombre }}</a>
+    <span class="sep">›</span>
+    <span>Requerimientos</span>
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-icon-box">
+        <mat-icon style="font-size: 2.2rem; width: 2.2rem; height: 2.2rem;">assignment</mat-icon>
+      </div>
+      <div>
+        <h1 class="page-title">Gestión de Requerimientos</h1>
+        <p class="page-subtitle">Define y organiza los requerimientos del proyecto <strong>{{ proyecto?.nombre }}</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <div class="stat-card" *ngFor="let tab of tabs" [style.border-left-color]="tab.color">
+      <mat-icon [style.color]="tab.color" style="font-size: 1.5rem; width: 1.5rem; height: 1.5rem;">{{ tab.icono }}</mat-icon>
+      <div class="stat-info">
+        <span class="stat-number" [style.color]="tab.color">{{ contarPorTipo(tab.key) }}</span>
+        <span class="stat-label">{{ tab.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-bar">
+    <button
+      *ngFor="let tab of tabs"
+      class="tab-btn"
+      [class.active]="tabActual === tab.key"
+      [style.--tab-color]="tab.color"
+      (click)="cambiarTab(tab.key)"
+    >
+      <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem; vertical-align: middle; margin-right: 6px;">{{ tab.icono }}</mat-icon>
+      {{ tab.label }}
+      <span class="tab-count">{{ contarPorTipo(tab.key) }}</span>
+    </button>
+  </div>
+
+  <!-- Botón nuevo -->
+  <div class="action-bar">
+    <button class="btn-nuevo" (click)="abrirNuevo()" [style.background]="getTabInfo().color">
+      <mat-icon style="vertical-align: middle; font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">add</mat-icon>
+      Nuevo Requerimiento
+    </button>
+  </div>
+
+  <!-- Formulario Modal -->
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="cerrarFormulario()">
+    <div class="modal-form" (click)="$event.stopPropagation()">
+      <div class="modal-header" [style.background]="getTabInfo().color">
+        <h2>
+          <mat-icon style="vertical-align: middle; font-size: 1.4rem; width: 1.4rem; height: 1.4rem; margin-right: 8px;">{{ editando ? 'edit' : 'add_circle' }}</mat-icon>
+          {{ editando ? 'Editar' : 'Nuevo' }} {{ getTabInfo().label }}
+        </h2>
+        <button class="modal-close" (click)="cerrarFormulario()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <form class="modal-body" (ngSubmit)="guardar()">
+        <div class="form-row">
+          <div class="form-group small">
+            <label>Código</label>
+            <input type="text" [(ngModel)]="codigo" name="codigo" readonly class="readonly-input"/>
+          </div>
+          <div class="form-group">
+            <label>Título <span class="req">*</span></label>
+            <input type="text" [(ngModel)]="titulo" name="titulo" placeholder="Nombre descriptivo del requerimiento"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción <span class="req">*</span></label>
+          <textarea [(ngModel)]="descripcion" name="descripcion" rows="3" placeholder="Describe el requerimiento en detalle..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prioridad</label>
+            <select [(ngModel)]="prioridad" name="prioridad">
+              <option value="alta">Alta</option>
+              <option value="media">Media</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Estado</label>
+            <select [(ngModel)]="estado" name="estado">
+              <option value="propuesto">Propuesto</option>
+              <option value="aprobado">Aprobado</option>
+              <option value="implementado">Implementado</option>
+              <option value="descartado">Descartado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Actor Principal</label>
+            <input type="text" [(ngModel)]="actorPrincipal" name="actorPrincipal" placeholder="Ej: Administrador, Usuario"/>
+          </div>
+          <div class="form-group">
+            <label>Módulo Relacionado</label>
+            <input type="text" [(ngModel)]="moduloRelacionado" name="moduloRelacionado" placeholder="Ej: Ventas, Inventario"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Criterios de Aceptación</label>
+          <textarea [(ngModel)]="criteriosAceptacion" name="criteriosAceptacion" rows="2" placeholder="¿Cómo se valida que se cumple?"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Dependencias</label>
+          <input type="text" [(ngModel)]="dependencias" name="dependencias" placeholder="Ej: RF-001, RF-003"/>
+        </div>
+
+        <p class="error-msg" *ngIf="errorMsg">
+          <mat-icon style="vertical-align: middle; font-size: 1rem; width: 1rem; height: 1rem; margin-right: 4px;">warning</mat-icon>
+          {{ errorMsg }}
+        </p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancelar" (click)="cerrarFormulario()">Cancelar</button>
+          <button type="submit" class="btn-guardar" [disabled]="guardando" [style.background]="getTabInfo().color">
+            {{ guardando ? 'Guardando...' : (editando ? 'Actualizar' : 'Guardar') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de requerimientos -->
+  <div class="req-list" *ngIf="requerimientos.length > 0; else vacio">
+    <div class="req-card" *ngFor="let r of requerimientos" [style.--accent]="getTabInfo().color">
+      <div class="req-card-header">
+        <div class="req-codigo" [style.background]="getTabInfo().color + '22'" [style.color]="getTabInfo().color">{{ r.codigo }}</div>
+        <h3 class="req-titulo">{{ r.titulo }}</h3>
+        <div class="req-badges">
+          <span [class]="'badge ' + prioridadClase(r.prioridad)">{{ r.prioridad }}</span>
+          <span [class]="'badge ' + estadoClase(r.estado)">{{ r.estado }}</span>
+        </div>
+      </div>
+      <p class="req-desc">{{ r.descripcion }}</p>
+      <div class="req-meta" *ngIf="r.actorPrincipal || r.moduloRelacionado">
+        <span *ngIf="r.actorPrincipal"><mat-icon style="font-size: 0.9rem; width: 0.9rem; height: 0.9rem; vertical-align: middle;">person</mat-icon> {{ r.actorPrincipal }}</span>
+        <span *ngIf="r.moduloRelacionado"><mat-icon style="font-size: 0.9rem; width: 0.9rem; height: 0.9rem; vertical-align: middle;">widgets</mat-icon> {{ r.moduloRelacionado }}</span>
+      </div>
+      <div class="req-actions">
+        <button class="btn-icon btn-edit" (click)="abrirEdicion(r)" title="Editar">
+          <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">edit</mat-icon>
+        </button>
+        <button class="btn-icon btn-delete" (click)="eliminar(r.id)" title="Eliminar">
+          <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #vacio>
+    <div class="estado-vacio">
+      <mat-icon class="vacio-icon" style="font-size: 3.5rem; width: 3.5rem; height: 3.5rem;" [style.color]="getTabInfo().color">{{ getTabInfo().icono }}</mat-icon>
+      <h3>Sin {{ getTabInfo().label }}</h3>
+      <p>Agrega el primer requerimiento de tipo <strong>{{ getTabInfo().label }}</strong></p>
+      <button class="btn-nuevo" (click)="abrirNuevo()" [style.background]="getTabInfo().color">
+        <mat-icon style="vertical-align: middle; font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">add</mat-icon>
+        Nuevo Requerimiento
+      </button>
+    </div>
+  </ng-template>
+</div>

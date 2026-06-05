@@ -1,0 +1,83 @@
+<div class="page-container">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/app/proyectos"><mat-icon style="vertical-align: middle; font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">folder</mat-icon> Proyectos</a>
+    <span class="sep">›</span>
+    <a [routerLink]="['/app/proyecto', proyectoId]">{{ proyecto?.nombre }}</a>
+    <span class="sep">›</span>
+    <span>Prompt Final</span>
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-icon-box">
+        <mat-icon style="font-size: 2.2rem; width: 2.2rem; height: 2.2rem;">auto_awesome</mat-icon>
+      </div>
+      <div>
+        <h1 class="page-title">Super Mega Prompt</h1>
+        <p class="page-subtitle">Especificación completa y prompt de desarrollo para <strong>{{ proyecto?.nombre }}</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-mini" style="--accent: #6366f1;">
+      <span class="stat-val">{{ stats.reqFuncionales }}</span>
+      <span class="stat-lbl">Req. Funcionales</span>
+    </div>
+    <div class="stat-mini" style="--accent: #f59e0b;">
+      <span class="stat-val">{{ stats.reqNoFuncionales }}</span>
+      <span class="stat-lbl">Req. No Func.</span>
+    </div>
+    <div class="stat-mini" style="--accent: #10b981;">
+      <span class="stat-val">{{ stats.reglasNegocio }}</span>
+      <span class="stat-lbl">Reglas Negocio</span>
+    </div>
+    <div class="stat-mini" style="--accent: #ec4899;">
+      <span class="stat-val">{{ stats.casosUso }}</span>
+      <span class="stat-lbl">Casos de Uso</span>
+    </div>
+    <div class="stat-mini" style="--accent: #3b82f6;">
+      <span class="stat-val">{{ stats.totalEntradas }}</span>
+      <span class="stat-lbl">Técnicas Total</span>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-bar">
+    <button class="btn-action btn-copiar" (click)="copiar()">
+      <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">{{ copiado ? 'check' : 'content_copy' }}</mat-icon>
+      {{ copiado ? '¡Copiado!' : 'Copiar Prompt' }}
+    </button>
+    <button class="btn-action btn-descargar" (click)="descargar()">
+      <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">download</mat-icon>
+      Descargar .txt
+    </button>
+  </div>
+
+  <!-- Prompt Output -->
+  <div class="prompt-area">
+    <div class="prompt-header">
+      <div class="prompt-title">
+        <mat-icon style="font-size: 1.3rem; width: 1.3rem; height: 1.3rem; color: #f59e0b;">auto_awesome</mat-icon>
+        <h2>Especificación Generada</h2>
+      </div>
+      <span class="prompt-chars">{{ promptGenerado.length | number }} caracteres</span>
+    </div>
+    <pre class="prompt-output">{{ promptGenerado }}</pre>
+  </div>
+
+  <!-- Tips -->
+  <div class="tips-section">
+    <h3><mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem; vertical-align: middle; color: #10b981;">tips_and_updates</mat-icon> Consejos</h3>
+    <ul>
+      <li>Agrega más <strong>requerimientos funcionales</strong> para un prompt más detallado</li>
+      <li>Define <strong>casos de uso</strong> para documentar los flujos del sistema</li>
+      <li>Registra <strong>entrevistas</strong> y <strong>observaciones</strong> para incluir hallazgos reales</li>
+      <li>Usa el prompt con ChatGPT, Claude, Gemini u otro LLM para generar código</li>
+      <li>Descarga el archivo .txt para compartirlo con tu equipo</li>
+    </ul>
+  </div>
+</div>

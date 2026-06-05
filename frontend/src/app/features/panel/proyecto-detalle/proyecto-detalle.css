@@ -1,0 +1,135 @@
+.page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 0.5rem 2rem;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* ── Breadcrumb ───────────────────────────── */
+.breadcrumb {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+.breadcrumb a { color: #1565c0; text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.sep { margin: 0 0.5rem; color: #999; }
+
+/* ── Header Proyecto ───────────────────────────────── */
+.proyecto-header {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.proyecto-icon {
+  font-size: 2.5rem;
+  background: #f0f0f0;
+  width: 60px; height: 60px;
+  display: flex; justify-content: center; align-items: center;
+  border-radius: 8px;
+}
+
+.header-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+.proyecto-nombre { font-size: 1.6rem; font-weight: bold; color: var(--color-dark-bg); margin: 0; }
+
+.badge { padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+.badge-activo { background: #e8f5e9; color: #2e7d32; }
+.badge-pausado { background: #fff8e1; color: #f57f17; }
+.badge-completado { background: #e3f2fd; color: #1565c0; }
+
+.proyecto-desc { color: #555; margin: 0 0 0.5rem; font-size: 0.95rem; }
+.proyecto-meta { display: flex; gap: 1.5rem; font-size: 0.85rem; color: #777; }
+
+/* ── Título Sección ─────────────────────── */
+.seccion-titulo { margin-bottom: 1rem; }
+.seccion-titulo h2 { font-size: 1.4rem; color: #333; margin: 0 0 0.2rem; }
+.seccion-titulo p { color: #666; font-size: 0.9rem; margin: 0; }
+
+/* ── Grid Técnicas ────────────────────────── */
+.tecnicas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.tecnica-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.2rem;
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  border-top: 4px solid var(--accent); /* Línea de color superior */
+}
+
+.tecnica-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.tecnica-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+.tecnica-icon { font-size: 1.8rem; }
+.tecnica-count { font-size: 1.5rem; font-weight: bold; line-height: 1; text-align: center; }
+.tecnica-count small { display: block; font-size: 0.7rem; font-weight: normal; color: #777; text-transform: uppercase; }
+
+.tecnica-nombre { font-size: 1.1rem; font-weight: bold; margin: 0 0 0.3rem; }
+.tecnica-desc { font-size: 0.85rem; color: #666; margin: 0; flex: 1; }
+
+.tecnica-footer {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #eee;
+  text-align: right;
+}
+.tecnica-link { font-size: 0.85rem; font-weight: bold; }
+
+/* ── Herramientas Grid ────────────────────── */
+.herramientas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.herramienta-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  text-align: center;
+  border-top: 4px solid var(--accent);
+}
+
+.herramienta-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.herramienta-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex; justify-content: center; align-items: center;
+  color: white;
+  margin: 0 auto 1rem;
+}
+
+.herramienta-card h3 {
+  font-size: 1.1rem; font-weight: 700; color: #1a1a2e; margin: 0 0 0.4rem;
+}
+
+.herramienta-card p {
+  font-size: 0.85rem; color: #666; margin: 0 0 1rem; line-height: 1.4;
+}
+
+.herramienta-link {
+  font-size: 0.85rem; font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .herramientas-grid { grid-template-columns: 1fr; }
+}
