@@ -1,32 +1,33 @@
 <div class="layout-wrapper">
-  <aside class="sidebar">
+  <aside class="sidebar-collapsible">
     <div class="sidebar-header">
       <div class="brand">
-        <h2>ProjectManager</h2>
+        <img src="assets/imagenes/ProjectMateLogo.png" alt="Logo" class="logo-icon" />
+        <span class="logo-text">ProjectManager</span>
       </div>
     </div>
 
     <nav class="menu">
       <a routerLink="/app/inicio" routerLinkActive="active" title="Inicio">
         <mat-icon>home</mat-icon>
-        <span class="text">Inicio</span>
+        <span class="menu-label">Inicio</span>
       </a>
 
       <a routerLink="/app/proyectos" routerLinkActive="active" title="Proyectos">
         <mat-icon>folder</mat-icon>
-        <span class="text">Proyectos</span>
+        <span class="menu-label">Proyectos</span>
       </a>
 
       <a routerLink="/app/crear-proyecto" routerLinkActive="active" title="Crear proyecto">
         <mat-icon>add_circle</mat-icon>
-        <span class="text">Crear proyecto</span>
+        <span class="menu-label">Crear proyecto</span>
       </a>
 
       <div class="spacer"></div>
 
       <a routerLink="/login" class="logout" title="Salir">
         <mat-icon>logout</mat-icon>
-        <span class="text">Salir</span>
+        <span class="menu-label">Salir</span>
       </a>
     </nav>
   </aside>

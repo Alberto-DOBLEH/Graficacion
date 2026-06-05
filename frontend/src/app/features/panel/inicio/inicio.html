@@ -1,1 +1,103 @@
-<p>inicio works!</p>
+<div class="dashboard-container">
+  <!-- Saludo Header -->
+  <div class="welcome-card">
+    <div class="welcome-text">
+      <h1>¡Hola, {{ userName }}! 👋</h1>
+      <p>Bienvenido al gestor de requisitos de software de ProjectManager. Aquí tienes el estado general de tus proyectos.</p>
+    </div>
+    <div class="welcome-action">
+      <a routerLink="/app/crear-proyecto" class="btn-primary">
+        <mat-icon style="vertical-align: middle; margin-right: 4px; font-size: 1.15rem; width: 1.15rem; height: 1.15rem;">add_circle</mat-icon>
+        Nuevo Proyecto
+      </a>
+    </div>
+  </div>
+
+  <!-- Estadísticas en Grid -->
+  <div class="stats-grid">
+    <div class="stat-box" style="--color: #3b82f6;">
+      <div class="stat-icon-wrapper">
+        <mat-icon>folder</mat-icon>
+      </div>
+      <div class="stat-details">
+        <span class="stat-value">{{ proyectos.length }}</span>
+        <span class="stat-title">Proyectos en total</span>
+      </div>
+    </div>
+
+    <div class="stat-box" style="--color: #10b981;">
+      <div class="stat-icon-wrapper">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <div class="stat-details">
+        <span class="stat-value">{{ stats.totalRequerimientos }}</span>
+        <span class="stat-title">Requerimientos registrados</span>
+      </div>
+    </div>
+
+    <div class="stat-box" style="--color: #f59e0b;">
+      <div class="stat-icon-wrapper">
+        <mat-icon>checklist</mat-icon>
+      </div>
+      <div class="stat-details">
+        <span class="stat-value">{{ stats.totalEntradas }}</span>
+        <span class="stat-title">Entradas técnicas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Proyectos Recientes y accesos rápidos -->
+  <div class="dashboard-content">
+    <div class="recent-projects">
+      <div class="content-header">
+        <h2>Proyectos Recientes</h2>
+        <a routerLink="/app/proyectos" class="view-all">Ver todos</a>
+      </div>
+
+      <div class="projects-list" *ngIf="proyectos.length > 0; else noProjects">
+        <div class="project-item" *ngFor="let p of proyectos | slice:0:3" [routerLink]="['/app/proyecto', p.id]">
+          <div class="project-info-mini">
+            <mat-icon class="project-icon-mini">folder_open</mat-icon>
+            <div>
+              <h3>{{ p.nombre }}</h3>
+              <p>{{ p.descripcion || 'Sin descripción' }}</p>
+            </div>
+          </div>
+          <div class="project-status">
+            <span class="status-badge" [class]="p.estado">{{ p.estado }}</span>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noProjects>
+        <div class="empty-state">
+          <mat-icon>folder_open</mat-icon>
+          <h3>Aún no tienes proyectos creados</h3>
+          <p>Crea tu primer proyecto para comenzar a registrar técnicas, requerimientos y diagramas UML.</p>
+          <a routerLink="/app/crear-proyecto" class="btn-primary">Crear proyecto</a>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Sección de Consejos y Atajos -->
+    <div class="dashboard-sidebar-info">
+      <h3>Atajos Rápidos</h3>
+      <div class="shortcuts-list">
+        <a routerLink="/app/crear-proyecto" class="shortcut-item">
+          <mat-icon>add_circle_outline</mat-icon>
+          <span>Crear un nuevo proyecto</span>
+        </a>
+        <a routerLink="/app/proyectos" class="shortcut-item">
+          <mat-icon>folder_shared</mat-icon>
+          <span>Ver mi listado de proyectos</span>
+        </a>
+      </div>
+
+      <div class="help-card">
+        <h4><mat-icon style="font-size: 1.15rem; width: 1.15rem; height: 1.15rem; vertical-align: middle; color: #f59e0b; margin-right: 4px;">lightbulb</mat-icon> Consejos</h4>
+        <p>Registra técnicas de recopilación como <strong>Entrevistas</strong>, <strong>Historias de usuario</strong> o <strong>Cuestionarios</strong>. El sistema usará esos datos para poblar automáticamente tus requerimientos y diagramas UML.</p>
+      </div>
+    </div>
+  </div>
+</div>

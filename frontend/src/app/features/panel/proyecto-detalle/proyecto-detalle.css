@@ -66,7 +66,6 @@
   padding: 1.2rem;
   cursor: pointer;
   display: flex; flex-direction: column;
-  border-top: 4px solid var(--accent); /* Línea de color superior */
 }
 
 .tecnica-card:hover {
@@ -103,7 +102,6 @@
   padding: 1.5rem;
   cursor: pointer;
   text-align: center;
-  border-top: 4px solid var(--accent);
 }
 
 .herramienta-card:hover {
