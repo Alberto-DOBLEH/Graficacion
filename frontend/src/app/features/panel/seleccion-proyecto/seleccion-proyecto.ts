@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,14 +14,34 @@ import { ProjectService, Proyecto } from '../../../core/services/project.service
 export class SeleccionProyecto implements OnInit {
   private projectService = inject(ProjectService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);  // 👈 agrega esto
+  private ngZone = inject(NgZone);
 
   proyectos: Proyecto[] = [];
+  cargando = true;
+  errorMsg = '';
 
   ngOnInit() {
-    this.proyectos = this.projectService.getProyectos();
+    this.projectService.listarProyectos().subscribe({
+      next: (data) => {
+        this.ngZone.run(() => {
+          console.log('proyectos recibidos:', data);
+          this.proyectos = data;
+          this.cargando = false;
+          this.cdr.detectChanges();  // 👈 agrega esto
+        });
+      },
+      error: (err) => {
+        this.ngZone.run(() => {  // 👈
+          console.error('error:', err);
+          this.errorMsg = 'No se pudieron cargar los proyectos.';
+          this.cargando = false;
+        });
+      }
+    });
   }
 
-  abrirProyecto(id: string) {
+  abrirProyecto(id: number | string) {
     this.router.navigate(['/app/proyecto', id]);
   }
 

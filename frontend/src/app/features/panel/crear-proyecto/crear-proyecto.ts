@@ -43,17 +43,19 @@ export class CrearProyecto {
     this.guardando = true;
     this.errorMsg = '';
 
-    const nuevo = this.projectService.crearProyecto({
+    this.projectService.crearProyecto({
       nombre: this.nombre.trim(),
       descripcion: this.descripcion.trim(),
-      metodologia: this.metodologia,
-      fechaInicio: this.fechaInicio,
       estado: this.estado,
+    }).subscribe({
+      next: (res) => {
+        this.guardando = false;
+        this.router.navigate(['/app/proyecto', res.id_proyecto]);
+      },
+      error: (err) => {
+        this.guardando = false;
+        this.errorMsg = err.error?.error || 'Error al guardar el proyecto.';
+      }
     });
-
-    setTimeout(() => {
-      this.guardando = false;
-      this.router.navigate(['/app/proyecto', nuevo.id]);
-    }, 500);
   }
 }

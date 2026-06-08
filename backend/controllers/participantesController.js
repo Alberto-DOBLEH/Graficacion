@@ -39,4 +39,33 @@ const crearParticipante = async (req, res) => { // <-- Le agregamos 'async' porq
     }
 };
 
-module.exports = { obtenerParticipantes, crearParticipante };
+const actualizarParticipante = (req, res) => {
+    const { id } = req.params;
+    const { nombre, email } = req.body;
+    let query = 'UPDATE Participantes SET ';
+    const params = [];
+    if (nombre) { query += 'nombre = ?, '; params.push(nombre); }
+    if (email) { query += 'email = ?, '; params.push(email); }
+    
+    if (params.length === 0) return res.status(400).json({ error: 'No hay datos para actualizar' });
+    
+    query = query.slice(0, -2) + ' WHERE id_participante = ?';
+    params.push(id);
+    
+    db.query(query, params, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error BD' });
+        if (results.affectedRows === 0) return res.status(404).json({ error: 'Participante no encontrado' });
+        res.json({ mensaje: 'Participante actualizado' });
+    });
+};
+
+const eliminarParticipante = (req, res) => {
+    const { id } = req.params;
+    db.query('DELETE FROM Participantes WHERE id_participante = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error BD' });
+        if (results.affectedRows === 0) return res.status(404).json({ error: 'Participante no encontrado' });
+        res.json({ mensaje: 'Participante eliminado' });
+    });
+};
+
+module.exports = { obtenerParticipantes, crearParticipante, actualizarParticipante, eliminarParticipante };

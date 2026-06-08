@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { forkJoin } from 'rxjs';
 import { ProjectService, EntradaTecnica, Proyecto } from '../../../core/services/project.service';
 
 interface TecnicaInfo {
@@ -40,18 +41,36 @@ export class TecnicasLista implements OnInit {
   entradas: EntradaTecnica[] = [];
   entradasFiltradas: EntradaTecnica[] = [];
   busqueda = '';
+  cargando = true;
 
   ngOnInit() {
     this.proyectoId = this.route.snapshot.paramMap.get('id') ?? '';
     this.tipo = this.route.snapshot.paramMap.get('tipo') ?? '';
     this.tecnicaInfo = TECNICAS_INFO[this.tipo] ?? TECNICAS_INFO['entrevistas'];
-    this.proyecto = this.projectService.getProyecto(this.proyectoId);
-    this.cargarEntradas();
+
+    forkJoin({
+      proyecto: this.projectService.obtenerProyecto(this.proyectoId),
+      entradas: this.projectService.getEntradas(this.proyectoId, this.tipo),
+    }).subscribe({
+      next: (res) => {
+        this.proyecto = res.proyecto;
+        this.entradas = res.entradas;
+        this.cargando = false;
+        this.filtrar();
+      },
+      error: () => {
+        this.cargando = false;
+      }
+    });
   }
 
   cargarEntradas() {
-    this.entradas = this.projectService.getEntradas(this.proyectoId, this.tipo);
-    this.filtrar();
+    this.projectService.getEntradas(this.proyectoId, this.tipo).subscribe({
+      next: (entradas) => {
+        this.entradas = entradas;
+        this.filtrar();
+      }
+    });
   }
 
   filtrar() {
@@ -61,10 +80,11 @@ export class TecnicasLista implements OnInit {
       : [...this.entradas];
   }
 
-  eliminar(id: string) {
+  eliminar(id: string | number) {
     if (confirm('¿Eliminar esta entrada?')) {
-      this.projectService.eliminarEntrada(id);
-      this.cargarEntradas();
+      this.projectService.eliminarEntrada(id).subscribe({
+        next: () => this.cargarEntradas()
+      });
     }
   }
 

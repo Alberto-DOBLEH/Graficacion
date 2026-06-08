@@ -1,29 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 
 export interface Proyecto {
-  id: string;
+  id_proyecto?: number;
   nombre: string;
-  descripcion: string;
-  metodologia: string;
-  fechaInicio: string;
-  estado: 'activo' | 'pausado' | 'completado';
-  creadoEn: string;
-}
-
-export interface EntradaTecnica {
-  id: string;
-  proyectoId: string;
-  tipo: string;
-  titulo: string;
-  datos: Record<string, any>;
-  creadoEn: string;
+  descripcion?: string;
+  estado?: string;
+  metodologia?: string;
+  fechaInicio?: string;
+  fecha_creacion?: string;
 }
 
 export interface Requerimiento {
-  id: string;
-  proyectoId: string;
+  id?: string | number;
+  proyectoId?: string;
+  tipo: string;
   codigo: string;
-  tipo: 'funcional' | 'no-funcional' | 'regla-negocio';
   titulo: string;
   descripcion: string;
   prioridad: 'alta' | 'media' | 'baja';
@@ -32,133 +25,191 @@ export interface Requerimiento {
   moduloRelacionado: string;
   criteriosAceptacion: string;
   dependencias: string;
-  creadoEn: string;
+}
+
+export interface EntradaTecnica {
+  id?: string | number;
+  proyectoId?: string;
+  tipo: string;
+  titulo: string;
+  datos: Record<string, any>;
+  fecha?: string;
+}
+
+export interface AnalisisRequerimiento {
+  id_analisis?: number;
+  id_proyecto: number;
+  tipo_metodo: string;
+  contenido: any;
+  creado_en?: string;
+}
+
+export interface Diagrama {
+  id_diagrama?: number;
+  id_proyecto: number;
+  tipo_diagrama: string;
+  codigo_generado: string;
+  creado_en?: string;
+}
+
+export interface Prompt {
+  id_prompt?: number;
+  id_proyecto: number;
+  contenido_prompt: string;
+  creado_en?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
-  private PROYECTOS_KEY = 'pm_proyectos';
-  private ENTRADAS_KEY = 'pm_entradas_tecnicas';
-  private REQUERIMIENTOS_KEY = 'pm_requerimientos';
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:3300/api';
 
-  getProyectos(): Proyecto[] {
-    const raw = localStorage.getItem(this.PROYECTOS_KEY);
-    if (raw) return JSON.parse(raw);
-    // Datos de ejemplo precargados
-    const ejemplos: Proyecto[] = [
-      {
-        id: 'p1',
-        nombre: 'Sistema de Inventario',
-        descripcion: 'Control de stock y movimientos de almacén',
-        metodologia: 'Ágil (Scrum)',
-        fechaInicio: '2026-01-15',
-        estado: 'activo',
-        creadoEn: '2026-01-15T08:00:00Z',
-      },
-      {
-        id: 'p2',
-        nombre: 'Portal RH',
-        descripcion: 'Módulo de gestión de recursos humanos y nómina',
-        metodologia: 'Cascada',
-        fechaInicio: '2026-02-01',
-        estado: 'pausado',
-        creadoEn: '2026-02-01T10:00:00Z',
-      },
-    ];
-    localStorage.setItem(this.PROYECTOS_KEY, JSON.stringify(ejemplos));
-    return ejemplos;
-  }
+  /** Obtiene las cabeceras de autorización con el token de sesión */
+  private getAuthHeaders(): { headers: { Authorization: string } } {
+    const raw = localStorage.getItem('project_manager_session');
 
-  getProyecto(id: string): Proyecto | undefined {
-    return this.getProyectos().find((p) => p.id === id);
-  }
-
-  crearProyecto(datos: Omit<Proyecto, 'id' | 'creadoEn'>): Proyecto {
-    const proyectos = this.getProyectos();
-    const nuevo: Proyecto = {
-      ...datos,
-      id: 'p' + Date.now(),
-      creadoEn: new Date().toISOString(),
-    };
-    proyectos.push(nuevo);
-    localStorage.setItem(this.PROYECTOS_KEY, JSON.stringify(proyectos));
-    return nuevo;
-  }
-
-  getEntradas(proyectoId: string, tipo: string): EntradaTecnica[] {
-    const raw = localStorage.getItem(this.ENTRADAS_KEY);
-    const todas: EntradaTecnica[] = raw ? JSON.parse(raw) : [];
-    return todas.filter((e) => e.proyectoId === proyectoId && e.tipo === tipo);
-  }
-
-  getTodasLasEntradas(proyectoId: string): EntradaTecnica[] {
-    const raw = localStorage.getItem(this.ENTRADAS_KEY);
-    const todas: EntradaTecnica[] = raw ? JSON.parse(raw) : [];
-    return todas.filter((e) => e.proyectoId === proyectoId);
-  }
-
-  contarEntradas(proyectoId: string, tipo: string): number {
-    return this.getEntradas(proyectoId, tipo).length;
-  }
-
-  crearEntrada(entrada: Omit<EntradaTecnica, 'id' | 'creadoEn'>): EntradaTecnica {
-    const raw = localStorage.getItem(this.ENTRADAS_KEY);
-    const todas: EntradaTecnica[] = raw ? JSON.parse(raw) : [];
-    const nueva: EntradaTecnica = {
-      ...entrada,
-      id: 'e' + Date.now(),
-      creadoEn: new Date().toISOString(),
-    };
-    todas.push(nueva);
-    localStorage.setItem(this.ENTRADAS_KEY, JSON.stringify(todas));
-    return nueva;
-  }
-
-  eliminarEntrada(id: string): void {
-    const raw = localStorage.getItem(this.ENTRADAS_KEY);
-    const todas: EntradaTecnica[] = raw ? JSON.parse(raw) : [];
-    const filtradas = todas.filter((e) => e.id !== id);
-    localStorage.setItem(this.ENTRADAS_KEY, JSON.stringify(filtradas));
-  }
-
-  getRequerimientos(proyectoId: string): Requerimiento[] {
-    const raw = localStorage.getItem(this.REQUERIMIENTOS_KEY);
-    const todos: Requerimiento[] = raw ? JSON.parse(raw) : [];
-    return todos.filter((r) => r.proyectoId === proyectoId);
-  }
-
-  getRequerimientosPorTipo(proyectoId: string, tipo: string): Requerimiento[] {
-    return this.getRequerimientos(proyectoId).filter((r) => r.tipo === tipo);
-  }
-
-  crearRequerimiento(req: Omit<Requerimiento, 'id' | 'creadoEn'>): Requerimiento {
-    const raw = localStorage.getItem(this.REQUERIMIENTOS_KEY);
-    const todos: Requerimiento[] = raw ? JSON.parse(raw) : [];
-    const nuevo: Requerimiento = {
-      ...req,
-      id: 'r' + Date.now(),
-      creadoEn: new Date().toISOString(),
-    };
-    todos.push(nuevo);
-    localStorage.setItem(this.REQUERIMIENTOS_KEY, JSON.stringify(todos));
-    return nuevo;
-  }
-
-  eliminarRequerimiento(id: string): void {
-    const raw = localStorage.getItem(this.REQUERIMIENTOS_KEY);
-    const todos: Requerimiento[] = raw ? JSON.parse(raw) : [];
-    const filtrados = todos.filter((r) => r.id !== id);
-    localStorage.setItem(this.REQUERIMIENTOS_KEY, JSON.stringify(filtrados));
-  }
-
-  actualizarRequerimiento(req: Requerimiento): void {
-    const raw = localStorage.getItem(this.REQUERIMIENTOS_KEY);
-    const todos: Requerimiento[] = raw ? JSON.parse(raw) : [];
-    const idx = todos.findIndex((r) => r.id === req.id);
-    if (idx >= 0) {
-      todos[idx] = req;
-      localStorage.setItem(this.REQUERIMIENTOS_KEY, JSON.stringify(todos));
+    if (!raw) {
+      console.warn('⚠️ No hay sesión en localStorage');
+      return { headers: { Authorization: '' } };
     }
+
+    const sesion = JSON.parse(raw);
+
+    if (!sesion?.token) {
+      console.warn('⚠️ Sesión existe pero sin token:', sesion);
+      return { headers: { Authorization: '' } };
+    }
+
+    return {
+      headers: {
+        Authorization: `Bearer ${sesion.token}`
+      }
+    };
+  }
+
+  // --- PROYECTOS ---
+  listarProyectos(): Observable<Proyecto[]> {
+    return this.http.get<Proyecto[]>(
+      `${this.apiUrl}/proyectos`,
+      this.getAuthHeaders()
+    );
+  }
+
+  obtenerProyecto(id: number | string): Observable<Proyecto> {
+    return this.http.get<Proyecto>(
+      `${this.apiUrl}/proyectos/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
+  crearProyecto(proyecto: Partial<Proyecto>): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/proyectos`,
+      proyecto,
+      this.getAuthHeaders()
+    );
+  }
+
+  actualizarProyecto(id: number | string, proyecto: Partial<Proyecto>): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/proyectos/${id}`,
+      proyecto,
+      this.getAuthHeaders()
+    );
+  }
+
+  eliminarProyecto(id: number | string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/proyectos/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // --- ENTRADAS TECNICAS ---
+  getTodasLasEntradas(id_proyecto: string | number): Observable<EntradaTecnica[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/analisis/proyecto/${id_proyecto}`,
+      this.getAuthHeaders()
+    ).pipe(
+      map(res => res.map(r => ({ ...r.contenido, id: r.id_analisis, tipo: r.contenido?.tipo || r.tipo_metodo } as EntradaTecnica)))
+    );
+  }
+
+  getEntradas(id_proyecto: string | number, tipo: string): Observable<EntradaTecnica[]> {
+    return this.getTodasLasEntradas(id_proyecto).pipe(
+      map(entradas => entradas.filter(e => e.tipo === tipo))
+    );
+  }
+
+  crearEntrada(entrada: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/analisis`,
+      {
+        id_proyecto: entrada.proyectoId,
+        tipo_metodo: entrada.tipo === 'taller-jad' ? 'focus_group' : (entrada.tipo === 'entrevistas' ? 'entrevista' : 'documentos'),
+        contenido: entrada
+      },
+      this.getAuthHeaders()
+    );
+  }
+
+  eliminarEntrada(id: string | number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/analisis/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // --- REQUERIMIENTOS (ANALISIS) ---
+  getRequerimientosPorTipo(id_proyecto: string | number, tipo: string): Observable<Requerimiento[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/analisis/proyecto/${id_proyecto}`,
+      this.getAuthHeaders()
+    ).pipe(
+      map(res => res
+        .map(r => ({ ...r.contenido, id: r.id_analisis } as Requerimiento))
+        .filter(r => r.tipo === tipo)
+      )
+    );
+  }
+
+  getRequerimientos(id_proyecto: string | number): Observable<Requerimiento[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/analisis/proyecto/${id_proyecto}`,
+      this.getAuthHeaders()
+    ).pipe(
+      map(res => res.map(r => ({ ...r.contenido, id: r.id_analisis } as Requerimiento)))
+    );
+  }
+
+  crearRequerimiento(req: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/analisis`,
+      {
+        id_proyecto: req.proyectoId,
+        tipo_metodo: 'historias_usuarios',
+        contenido: req
+      },
+      this.getAuthHeaders()
+    );
+  }
+
+  actualizarRequerimiento(req: any): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/analisis/${req.id}`,
+      {
+        tipo_metodo: 'historias_usuarios',
+        contenido: req
+      },
+      this.getAuthHeaders()
+    );
+  }
+
+  eliminarRequerimiento(id: string | number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/analisis/${id}`,
+      this.getAuthHeaders()
+    );
   }
 
   generarCodigoRequerimiento(proyectoId: string, tipo: string): string {
@@ -167,9 +218,46 @@ export class ProjectService {
       'no-funcional': 'RNF',
       'regla-negocio': 'RN',
     };
-    const prefijo = prefijos[tipo] || 'R';
-    const existentes = this.getRequerimientosPorTipo(proyectoId, tipo);
-    const num = existentes.length + 1;
-    return `${prefijo}-${num.toString().padStart(3, '0')}`;
+    return `${prefijos[tipo] || 'R'}-${Math.floor(Math.random() * 1000)}`;
+  }
+
+  // --- DIAGRAMAS ---
+  obtenerDiagramas(id_proyecto: number | string): Observable<Diagrama[]> {
+    return this.http.get<Diagrama[]>(
+      `${this.apiUrl}/diagramas/proyecto/${id_proyecto}`,
+      this.getAuthHeaders()
+    );
+  }
+
+  guardarDiagrama(diagrama: Partial<Diagrama>): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/diagramas`,
+      diagrama,
+      this.getAuthHeaders()
+    );
+  }
+
+  // --- PROMPTS ---
+  obtenerPrompts(id_proyecto: number | string): Observable<Prompt[]> {
+    return this.http.get<Prompt[]>(
+      `${this.apiUrl}/prompts/proyecto/${id_proyecto}`,
+      this.getAuthHeaders()
+    );
+  }
+
+  guardarPrompt(prompt: Partial<Prompt>): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/prompts`,
+      prompt,
+      this.getAuthHeaders()
+    );
+  }
+
+  generarPromptIA(id_proyecto: number | string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/prompts/generar/${id_proyecto}`,
+      {},
+      this.getAuthHeaders()
+    );
   }
 }

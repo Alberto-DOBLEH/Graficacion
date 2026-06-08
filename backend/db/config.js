@@ -1,13 +1,13 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 require('dotenv').config(); // Cargamos las variables del archivo .env
 
 // Creamos un "Pool" de conexiones
 const db = mysql.createPool({
     connectionLimit: 10, // Máximo de conexiones simultáneas
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: process.env.DBHOST,
+    user: process.env.DBUSER,
+    password: process.env.DBPASS,
+    database: process.env.DBNAME
 });
 
 // Probamos la conexión al iniciar

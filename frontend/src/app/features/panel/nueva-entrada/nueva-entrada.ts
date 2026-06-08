@@ -145,9 +145,12 @@ export class NuevaEntrada implements OnInit {
     this.proyectoId = this.route.snapshot.paramMap.get('id') ?? '';
     this.tipo = this.route.snapshot.paramMap.get('tipo') ?? '';
     this.config = CONFIGS[this.tipo] ?? CONFIGS['entrevistas'];
-    this.proyecto = this.projectService.getProyecto(this.proyectoId);
     // Inicializar datos
     this.config.campos.forEach((c) => (this.datos[c.key] = ''));
+    this.projectService.obtenerProyecto(this.proyectoId).subscribe({
+      next: (p) => { this.proyecto = p; },
+      error: () => {}
+    });
   }
 
   onGuardar() {
@@ -168,10 +171,15 @@ export class NuevaEntrada implements OnInit {
       tipo: this.tipo,
       titulo: this.titulo.trim(),
       datos: { ...this.datos },
+    }).subscribe({
+      next: () => {
+        this.guardando = false;
+        this.router.navigate(['/app/proyecto', this.proyectoId, 'tecnicas', this.tipo]);
+      },
+      error: () => {
+        this.guardando = false;
+        this.errorMsg = 'Error al guardar la entrada. Intenta de nuevo.';
+      }
     });
-    setTimeout(() => {
-      this.guardando = false;
-      this.router.navigate(['/app/proyecto', this.proyectoId, 'tecnicas', this.tipo]);
-    }, 500);
   }
 }

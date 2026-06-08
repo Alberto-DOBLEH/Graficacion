@@ -41,11 +41,11 @@
       <div class="entrada-header">
         <div class="entrada-dot" [style.background]="tecnicaInfo.color"></div>
         <h3 class="entrada-titulo">{{ e.titulo }}</h3>
-        <span class="entrada-fecha">{{ formatFecha(e.creadoEn) }}</span>
+        <span class="entrada-fecha">{{ e.fecha ? formatFecha(e.fecha) : '' }}</span>
       </div>
       <p class="entrada-resumen">{{ getResumen(e) }}</p>
       <div class="entrada-footer">
-        <button class="btn-eliminar" (click)="eliminar(e.id)">
+        <button class="btn-eliminar" (click)="eliminar(e.id ?? '')">
           <mat-icon style="vertical-align: middle; font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">delete</mat-icon> Eliminar
         </button>
       </div>

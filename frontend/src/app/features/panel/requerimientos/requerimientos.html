@@ -141,8 +141,14 @@
     </div>
   </div>
 
+  <!-- Loading State -->
+  <div class="cargando-estado" *ngIf="cargando">
+    <mat-icon class="spinner" style="font-size: 2rem; width: 2rem; height: 2rem; animation: spin 1s linear infinite;">autorenew</mat-icon>
+    <p>Cargando requerimientos...</p>
+  </div>
+
   <!-- Lista de requerimientos -->
-  <div class="req-list" *ngIf="requerimientos.length > 0; else vacio">
+  <div class="req-list" *ngIf="!cargando && requerimientos.length > 0; else vacioTemplate">
     <div class="req-card" *ngFor="let r of requerimientos" [style.--accent]="getTabInfo().color">
       <div class="req-card-header">
         <div class="req-codigo" [style.background]="getTabInfo().color + '22'" [style.color]="getTabInfo().color">{{ r.codigo }}</div>
@@ -161,15 +167,15 @@
         <button class="btn-icon btn-edit" (click)="abrirEdicion(r)" title="Editar">
           <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">edit</mat-icon>
         </button>
-        <button class="btn-icon btn-delete" (click)="eliminar(r.id)" title="Eliminar">
+        <button class="btn-icon btn-delete" (click)="eliminar(r.id + '')" title="Eliminar">
           <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">delete</mat-icon>
         </button>
       </div>
     </div>
   </div>
 
-  <ng-template #vacio>
-    <div class="estado-vacio">
+  <ng-template #vacioTemplate>
+    <div class="estado-vacio" *ngIf="!cargando">
       <mat-icon class="vacio-icon" style="font-size: 3.5rem; width: 3.5rem; height: 3.5rem;" [style.color]="getTabInfo().color">{{ getTabInfo().icono }}</mat-icon>
       <h3>Sin {{ getTabInfo().label }}</h3>
       <p>Agrega el primer requerimiento de tipo <strong>{{ getTabInfo().label }}</strong></p>

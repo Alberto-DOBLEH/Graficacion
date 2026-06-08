@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, AfterViewChecked, ElementRef } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,17 +45,30 @@ export class Diagramas implements OnInit, AfterViewChecked {
     { key: 'er', nombre: 'Entidad-Relación', icono: 'storage', color: '#ec4899', descripcion: 'Modelo de datos' },
   ];
 
+  cargando = true;
+  errorMsg = '';
+
   ngOnInit() {
     this.proyectoId = this.route.snapshot.paramMap.get('id') ?? '';
-    this.proyecto = this.ps.getProyecto(this.proyectoId);
-    if (!this.proyecto) {
-      this.router.navigate(['/app/proyectos']);
-      return;
-    }
-    this.requerimientos = this.ps.getRequerimientos(this.proyectoId);
-    this.entradas = this.ps.getTodasLasEntradas(this.proyectoId);
-    this.cargarMermaid();
-    this.generarDiagrama();
+    
+    forkJoin({
+      proyecto: this.ps.obtenerProyecto(this.proyectoId),
+      requerimientos: this.ps.getRequerimientos(this.proyectoId),
+      entradas: this.ps.getTodasLasEntradas(this.proyectoId)
+    }).subscribe({
+      next: (res) => {
+        this.proyecto = res.proyecto;
+        this.requerimientos = res.requerimientos;
+        this.entradas = res.entradas;
+        this.cargando = false;
+        this.cargarMermaid();
+        this.generarDiagrama();
+      },
+      error: () => {
+        this.cargando = false;
+        this.errorMsg = 'Error al cargar los datos del proyecto.';
+      }
+    });
   }
 
   ngAfterViewChecked() {

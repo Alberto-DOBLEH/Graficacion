@@ -23,7 +23,8 @@ app.use('/api/participantes', require('./routes/participantes'));
 app.use('/api/proyectos', require('./routes/proyectos'));
 app.use('/api/analisis', require('./routes/proceso'));
 app.use('/api/auth', require('./routes/auth'));
-
+app.use('/api/diagramas', require('./routes/diagramas'));
+app.use('/api/prompts', require('./routes/prompts'));
 // 5. Encendemos el servidor para que se quede escuchando (¡Esto evita el clean exit!)
 const PORT = process.env.PORT || 3300;
 app.listen(PORT, () => {

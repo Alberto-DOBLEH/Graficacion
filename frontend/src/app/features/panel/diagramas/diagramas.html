@@ -21,8 +21,18 @@
     </div>
   </div>
 
+  <!-- Loading State -->
+  <div class="cargando-estado" *ngIf="cargando">
+    <mat-icon class="spinner" style="font-size: 2rem; width: 2rem; height: 2rem; animation: spin 1s linear infinite;">autorenew</mat-icon>
+    <p>Cargando datos para diagramas...</p>
+  </div>
+
+  <div class="error-msg" *ngIf="errorMsg" style="color: red; text-align: center; margin-top: 20px;">
+    <mat-icon>error</mat-icon> {{ errorMsg }}
+  </div>
+
   <!-- Diagram Selector Grid -->
-  <div class="diagrama-grid">
+  <div class="diagrama-grid" *ngIf="!cargando && !errorMsg">
     <div
       class="diagrama-card"
       *ngFor="let d of diagramas"
@@ -37,7 +47,7 @@
   </div>
 
   <!-- Diagram Render Area -->
-  <div class="render-area">
+  <div class="render-area" *ngIf="!cargando && !errorMsg">
     <div class="render-header">
       <div class="render-title">
         <mat-icon [style.color]="getDiagramaInfo().color" style="font-size: 1.4rem; width: 1.4rem; height: 1.4rem;">{{ getDiagramaInfo().icono }}</mat-icon>

@@ -21,8 +21,18 @@
     </div>
   </div>
 
+  <!-- Loading State -->
+  <div class="cargando-estado" *ngIf="cargando">
+    <mat-icon class="spinner" style="font-size: 2rem; width: 2rem; height: 2rem; animation: spin 1s linear infinite;">autorenew</mat-icon>
+    <p>Cargando datos para generar el prompt...</p>
+  </div>
+
+  <div class="error-msg" *ngIf="errorMsg" style="color: red; text-align: center; margin-top: 20px;">
+    <mat-icon>error</mat-icon> {{ errorMsg }}
+  </div>
+
   <!-- Stats Overview -->
-  <div class="stats-grid">
+  <div class="stats-grid" *ngIf="!cargando && !errorMsg">
     <div class="stat-mini" style="--accent: #6366f1;">
       <span class="stat-val">{{ stats.reqFuncionales }}</span>
       <span class="stat-lbl">Req. Funcionales</span>
@@ -46,7 +56,11 @@
   </div>
 
   <!-- Action Buttons -->
-  <div class="action-bar">
+  <div class="action-bar" *ngIf="!cargando && !errorMsg">
+    <button class="btn-action btn-claude" style="background: #8b5cf6; color: white;" (click)="generarConIA()" [disabled]="generandoIA">
+      <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">{{ generandoIA ? 'autorenew' : 'psychology' }}</mat-icon>
+      {{ generandoIA ? 'Claude pensando...' : 'Generar con Claude AI' }}
+    </button>
     <button class="btn-action btn-copiar" (click)="copiar()">
       <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">{{ copiado ? 'check' : 'content_copy' }}</mat-icon>
       {{ copiado ? '¡Copiado!' : 'Copiar Prompt' }}
@@ -58,7 +72,7 @@
   </div>
 
   <!-- Prompt Output -->
-  <div class="prompt-area">
+  <div class="prompt-area" *ngIf="!cargando && !errorMsg">
     <div class="prompt-header">
       <div class="prompt-title">
         <mat-icon style="font-size: 1.3rem; width: 1.3rem; height: 1.3rem; color: #f59e0b;">auto_awesome</mat-icon>
