@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { forkJoin } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProjectService, Proyecto } from '../../../core/services/project.service';
 
@@ -30,17 +31,24 @@ export class Inicio implements OnInit {
       this.userName = sesion.nombre;
     }
 
-    this.proyectos = this.ps.getProyectos();
-    this.stats.proyectosActivos = this.proyectos.filter(p => p.estado === 'activo').length;
+    this.ps.listarProyectos().subscribe({
+      next: (proyectos) => {
+        this.proyectos = proyectos;
+        this.stats.proyectosActivos = proyectos.filter(p => p.estado === 'activo').length;
 
-    let reqsCount = 0;
-    let entradasCount = 0;
-    this.proyectos.forEach(p => {
-      reqsCount += this.ps.getRequerimientos(p.id).length;
-      entradasCount += this.ps.getTodasLasEntradas(p.id).length;
+        if (proyectos.length === 0) return;
+
+        const reqs$ = proyectos.map(p => this.ps.getRequerimientos(p.id_proyecto!));
+        const entradas$ = proyectos.map(p => this.ps.getTodasLasEntradas(p.id_proyecto!));
+
+        forkJoin(reqs$).subscribe(allReqs => {
+          this.stats.totalRequerimientos = allReqs.reduce((sum, r) => sum + r.length, 0);
+        });
+
+        forkJoin(entradas$).subscribe(allEntradas => {
+          this.stats.totalEntradas = allEntradas.reduce((sum, e) => sum + e.length, 0);
+        });
+      }
     });
-
-    this.stats.totalRequerimientos = reqsCount;
-    this.stats.totalEntradas = entradasCount;
   }
 }

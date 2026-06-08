@@ -22,4 +22,34 @@ const crearAnalisis = (req, res) => {
     });
 };
 
-module.exports = { obtenerAnalisisPorProyecto, crearAnalisis };
+const actualizarAnalisis = (req, res) => {
+    const { id } = req.params;
+    const { tipo_metodo, contenido } = req.body;
+    let query = 'UPDATE Analisis_Requerimientos SET ';
+    const params = [];
+    
+    if (tipo_metodo) { query += 'tipo_metodo = ?, '; params.push(tipo_metodo); }
+    if (contenido) { query += 'contenido = ?, '; params.push(JSON.stringify(contenido)); }
+    
+    if (params.length === 0) return res.status(400).json({ error: 'No hay datos para actualizar' });
+    
+    query = query.slice(0, -2) + ' WHERE id_analisis = ?';
+    params.push(id);
+    
+    db.query(query, params, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error BD' });
+        if (results.affectedRows === 0) return res.status(404).json({ error: 'Análisis no encontrado' });
+        res.json({ mensaje: 'Análisis actualizado' });
+    });
+};
+
+const eliminarAnalisis = (req, res) => {
+    const { id } = req.params;
+    db.query('DELETE FROM Analisis_Requerimientos WHERE id_analisis = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error BD' });
+        if (results.affectedRows === 0) return res.status(404).json({ error: 'Análisis no encontrado' });
+        res.json({ mensaje: 'Análisis eliminado' });
+    });
+};
+
+module.exports = { obtenerAnalisisPorProyecto, crearAnalisis, actualizarAnalisis, eliminarAnalisis };

@@ -13,18 +13,24 @@
     </a>
   </div>
 
-  <div class="proyectos-grid" *ngIf="proyectos.length > 0; else vacio">
-    <div
-      class="proyecto-card"
-      *ngFor="let p of proyectos"
-      (click)="abrirProyecto(p.id)"
-    >
+  <div class="cargando-estado" *ngIf="cargando">
+    <mat-icon
+      style="font-size: 2rem; width: 2rem; height: 2rem; animation: spin 1s linear infinite;">autorenew</mat-icon>
+    <p>Cargando proyectos...</p>
+  </div>
+
+  <div *ngIf="errorMsg" style="color: red; text-align: center; margin-top: 20px;">
+    <mat-icon>error</mat-icon> {{ errorMsg }}
+  </div>
+
+  <div class="proyectos-grid" *ngIf="!cargando && !errorMsg && proyectos.length > 0">
+    <div class="proyecto-card" *ngFor="let p of proyectos" (click)="abrirProyecto(p.id_proyecto!)">
       <div class="card-top">
         <div class="card-icon">
           <mat-icon>folder_open</mat-icon>
         </div>
-        <span [class]="'badge ' + estadoClase(p.estado)">
-          {{ estadoLabel(p.estado) }}
+        <span [class]="'badge ' + estadoClase(p.estado || '')">
+          {{ estadoLabel(p.estado || '') }}
         </span>
       </div>
 
@@ -37,11 +43,11 @@
         <div class="card-meta">
           <span class="meta-item">
             <mat-icon class="meta-icon">explore</mat-icon>
-            {{ p.metodologia }}
+            {{ p.metodologia || 'N/A' }}
           </span>
           <span class="meta-item">
             <mat-icon class="meta-icon">calendar_today</mat-icon>
-            {{ formatFecha(p.fechaInicio) }}
+            {{ p.fechaInicio ? formatFecha(p.fechaInicio) : 'Sin fecha' }}
           </span>
         </div>
         <mat-icon class="card-arrow">arrow_forward</mat-icon>
@@ -49,15 +55,13 @@
     </div>
   </div>
 
-  <ng-template #vacio>
-    <div class="estado-vacio">
-      <mat-icon class="vacio-icon">assignment</mat-icon>
-      <h3>No hay proyectos aún</h3>
-      <p>Crea tu primer proyecto para comenzar a gestionar los requisitos</p>
-      <a routerLink="/app/crear-proyecto" class="btn-nuevo">
-        <mat-icon class="btn-icon">add</mat-icon>
-        Crear primer proyecto
-      </a>
-    </div>
-  </ng-template>
+  <div class="estado-vacio" *ngIf="!cargando && !errorMsg && proyectos.length === 0">
+    <mat-icon class="vacio-icon">assignment</mat-icon>
+    <h3>No hay proyectos aún</h3>
+    <p>Crea tu primer proyecto para comenzar a gestionar los requisitos</p>
+    <a routerLink="/app/crear-proyecto" class="btn-nuevo">
+      <mat-icon class="btn-icon">add</mat-icon>
+      Crear primer proyecto
+    </a>
+  </div>
 </div>

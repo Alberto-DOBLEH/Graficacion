@@ -36,6 +36,7 @@ export class Requerimientos implements OnInit {
   dependencias = '';
   errorMsg = '';
   guardando = false;
+  cargando = true;
 
   tabs = [
     { key: 'funcional' as const, label: 'Req. Funcionales', icono: 'check_circle', color: '#6366f1' },
@@ -45,16 +46,27 @@ export class Requerimientos implements OnInit {
 
   ngOnInit() {
     this.proyectoId = this.route.snapshot.paramMap.get('id') ?? '';
-    this.proyecto = this.ps.getProyecto(this.proyectoId);
-    if (!this.proyecto) {
-      this.router.navigate(['/app/proyectos']);
-      return;
-    }
-    this.cargar();
+    this.ps.obtenerProyecto(this.proyectoId).subscribe({
+      next: (p) => {
+        this.proyecto = p;
+        this.cargar();
+      },
+      error: () => this.router.navigate(['/app/proyectos'])
+    });
   }
 
   cargar() {
-    this.requerimientos = this.ps.getRequerimientosPorTipo(this.proyectoId, this.tabActual);
+    this.cargando = true;
+    this.ps.getRequerimientosPorTipo(this.proyectoId, this.tabActual).subscribe({
+      next: (reqs) => {
+        this.requerimientos = reqs;
+        this.cargando = false;
+      },
+      error: () => {
+        this.errorMsg = 'Error al cargar requerimientos.';
+        this.cargando = false;
+      }
+    });
   }
 
   cambiarTab(tab: 'funcional' | 'no-funcional' | 'regla-negocio') {
@@ -127,6 +139,16 @@ export class Requerimientos implements OnInit {
         moduloRelacionado: this.moduloRelacionado.trim(),
         criteriosAceptacion: this.criteriosAceptacion.trim(),
         dependencias: this.dependencias.trim(),
+      }).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.cerrarFormulario();
+          this.cargar();
+        },
+        error: () => {
+          this.guardando = false;
+          this.errorMsg = 'Error al actualizar requerimiento';
+        }
       });
     } else {
       this.ps.crearRequerimiento({
@@ -141,20 +163,26 @@ export class Requerimientos implements OnInit {
         moduloRelacionado: this.moduloRelacionado.trim(),
         criteriosAceptacion: this.criteriosAceptacion.trim(),
         dependencias: this.dependencias.trim(),
+      }).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.cerrarFormulario();
+          this.cargar();
+        },
+        error: () => {
+          this.guardando = false;
+          this.errorMsg = 'Error al crear requerimiento';
+        }
       });
     }
-
-    setTimeout(() => {
-      this.guardando = false;
-      this.cerrarFormulario();
-      this.cargar();
-    }, 300);
   }
 
   eliminar(id: string) {
     if (confirm('¿Eliminar este requerimiento?')) {
-      this.ps.eliminarRequerimiento(id);
-      this.cargar();
+      this.ps.eliminarRequerimiento(id).subscribe({
+        next: () => this.cargar(),
+        error: () => alert('Error al eliminar')
+      });
     }
   }
 
@@ -167,6 +195,6 @@ export class Requerimientos implements OnInit {
   }
 
   contarPorTipo(tipo: string): number {
-    return this.ps.getRequerimientosPorTipo(this.proyectoId, tipo).length;
+    return this.requerimientos.filter(r => r.tipo === tipo).length;
   }
 }

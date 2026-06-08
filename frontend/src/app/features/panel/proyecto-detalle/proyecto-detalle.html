@@ -13,14 +13,14 @@
       <div>
         <div class="header-top">
           <h1 class="proyecto-nombre">{{ proyecto.nombre }}</h1>
-          <span [class]="'badge ' + estadoBadgeClass(proyecto.estado)">
-            {{ estadoLabel(proyecto.estado) }}
+          <span [class]="'badge ' + estadoBadgeClass(proyecto.estado || '')">
+            {{ estadoLabel(proyecto.estado || '') }}
           </span>
         </div>
         <p class="proyecto-desc">{{ proyecto.descripcion || 'Sin descripción' }}</p>
         <div class="proyecto-meta">
-          <span><mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">explore</mat-icon> {{ proyecto.metodologia }}</span>
-          <span><mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">calendar_today</mat-icon> Inicio: {{ proyecto.fechaInicio }}</span>
+          <span><mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">explore</mat-icon> {{ proyecto.metodologia || 'N/A' }}</span>
+          <span><mat-icon style="vertical-align: middle; font-size: 1.1em; width: 1.1em; height: 1.1em;">calendar_today</mat-icon> Inicio: {{ proyecto.fechaInicio || proyecto.fecha_creacion || 'N/A' }}</span>
         </div>
       </div>
     </div>

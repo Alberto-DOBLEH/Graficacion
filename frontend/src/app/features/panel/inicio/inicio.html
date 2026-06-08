@@ -55,7 +55,7 @@
       </div>
 
       <div class="projects-list" *ngIf="proyectos.length > 0; else noProjects">
-        <div class="project-item" *ngFor="let p of proyectos | slice:0:3" [routerLink]="['/app/proyecto', p.id]">
+        <div class="project-item" *ngFor="let p of proyectos | slice:0:3" [routerLink]="['/app/proyecto', p.id_proyecto]">
           <div class="project-info-mini">
             <mat-icon class="project-icon-mini">folder_open</mat-icon>
             <div>
