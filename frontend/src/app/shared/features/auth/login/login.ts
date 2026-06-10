@@ -22,9 +22,9 @@ export class Login implements OnInit {
   cargando: boolean = false;
   errorMessage: string = '';
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  onEmailChange() {}
+  onEmailChange() { }
 
   onLogin() {
     this.errorMessage = '';
@@ -37,7 +37,7 @@ export class Login implements OnInit {
     this.authService.login(this.email, this.password).subscribe({
       next: (res: any) => {
         this.cargando = false;
-        this.router.navigate(['/app/proyectos']);
+        this.router.navigate(['/app/inicio']);
         this.closeModal.emit();
       },
       error: (err: any) => {
