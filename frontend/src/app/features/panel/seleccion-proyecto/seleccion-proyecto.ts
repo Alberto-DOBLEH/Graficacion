@@ -25,7 +25,6 @@ export class SeleccionProyecto implements OnInit {
     this.projectService.listarProyectos().subscribe({
       next: (data) => {
         this.ngZone.run(() => {
-          console.log('proyectos recibidos:', data);
           this.proyectos = data;
           this.cargando = false;
           this.cdr.detectChanges();  // 👈 agrega esto

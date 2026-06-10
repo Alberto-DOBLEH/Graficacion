@@ -131,7 +131,23 @@ export class ProjectService {
       `${this.apiUrl}/analisis/proyecto/${id_proyecto}`,
       this.getAuthHeaders()
     ).pipe(
-      map(res => res.map(r => ({ ...r.contenido, id: r.id_analisis, tipo: r.contenido?.tipo || r.tipo_metodo } as EntradaTecnica)))
+      map(res => {
+        return res.map(r => {
+          // El backend devuelve `contenido` como string JSON, hay que parsearlo
+          let contenido: any = r.contenido;
+          if (typeof contenido === 'string') {
+            try { contenido = JSON.parse(contenido); } catch { contenido = {}; }
+          }
+          const entrada: EntradaTecnica = {
+            ...contenido,
+            id: r.id_analisis,
+            // Priorizar el tipo guardado dentro del contenido (slug original),
+            // si no existe, usar tipo_metodo de la fila de BD como fallback
+            tipo: contenido?.tipo || r.tipo_metodo,
+          };
+          return entrada;
+        });
+      })
     );
   }
 

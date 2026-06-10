@@ -1,9 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { forkJoin } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { ProjectService, EntradaTecnica, Proyecto } from '../../../core/services/project.service';
 
 interface TecnicaInfo {
@@ -33,6 +33,8 @@ export class TecnicasLista implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private projectService = inject(ProjectService);
+  private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
 
   proyectoId = '';
   tipo = '';
@@ -48,18 +50,27 @@ export class TecnicasLista implements OnInit {
     this.tipo = this.route.snapshot.paramMap.get('tipo') ?? '';
     this.tecnicaInfo = TECNICAS_INFO[this.tipo] ?? TECNICAS_INFO['entrevistas'];
 
-    forkJoin({
-      proyecto: this.projectService.obtenerProyecto(this.proyectoId),
-      entradas: this.projectService.getEntradas(this.proyectoId, this.tipo),
-    }).subscribe({
-      next: (res) => {
-        this.proyecto = res.proyecto;
-        this.entradas = res.entradas;
-        this.cargando = false;
-        this.filtrar();
+    // Primero cargar el proyecto, luego las entradas de forma secuencial
+    this.projectService.obtenerProyecto(this.proyectoId).pipe(
+      switchMap(proyecto => {
+        this.proyecto = proyecto;
+        return this.projectService.getEntradas(this.proyectoId, this.tipo);
+      })
+    ).subscribe({
+      next: (entradas) => {
+        this.ngZone.run(() => {
+          this.entradas = Array.isArray(entradas) ? entradas : [];
+          this.cargando = false;
+          this.filtrar();
+          this.cdr.detectChanges();
+        });
       },
-      error: () => {
-        this.cargando = false;
+      error: (err) => {
+        this.ngZone.run(() => {
+          console.error('❌ Error cargando datos:', err);
+          this.cargando = false;
+          this.cdr.detectChanges();
+        });
       }
     });
   }
