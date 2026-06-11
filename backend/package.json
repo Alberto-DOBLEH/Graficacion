@@ -4,9 +4,11 @@
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "express-fileupload": "^1.5.2",
     "express-validator": "^7.3.2",
     "jsonwebtoken": "^9.0.3",
-    "mysql2": "^3.22.5"
+    "mysql2": "^3.22.5",
+    "pdf-parse": "^2.4.5"
   },
   "name": "backend",
   "version": "1.0.0",

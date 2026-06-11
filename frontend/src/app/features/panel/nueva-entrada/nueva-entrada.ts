@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -114,6 +114,19 @@ const CONFIGS: Record<string, TecnicaFormConfig> = {
       { key: 'notas', label: 'Notas adicionales', tipo: 'textarea', placeholder: 'Consideraciones técnicas, restricciones...' },
     ],
   },
+  'anexos': {
+    nombre: 'Anexos',
+    icono: 'attach_file',
+    color: '#0ea5e9',
+    campos: [
+      { key: 'descripcion', label: 'Descripción breve del anexo', tipo: 'text', placeholder: 'Ej: Manual de procesos internos', requerido: true },
+      { key: 'fecha', label: 'Fecha de adición', tipo: 'date', requerido: true },
+      { key: 'origen', label: 'Origen / Fuente', tipo: 'text', placeholder: 'Ej: Departamento de TI, Cliente, Equipo de desarrollo' },
+      { key: 'tipoAnexo', label: 'Tipo de anexo', tipo: 'select', options: ['Documento', 'Imagen / Captura', 'Diagrama externo', 'Acta de reunión', 'Correo electrónico', 'Otro'] },
+      { key: 'contenido', label: 'Contenido / Texto del anexo', tipo: 'textarea', placeholder: 'Pega aquí el contenido relevante del documento, acta, correo o texto de soporte...', requerido: true },
+      { key: 'notas', label: 'Notas adicionales', tipo: 'textarea', placeholder: 'Observaciones, contexto adicional...' },
+    ],
+  },
 };
 
 @Component({
@@ -127,6 +140,7 @@ export class NuevaEntrada implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private projectService = inject(ProjectService);
+  private cdr = inject(ChangeDetectorRef);
 
   proyectoId = '';
   tipo = '';
@@ -136,9 +150,69 @@ export class NuevaEntrada implements OnInit {
   titulo = '';
   guardando = false;
   errorMsg = '';
+  
+  isDragOver = false;
+  analizandoArchivo = false;
 
   get campos(): Campo[] {
     return this.config.campos;
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.procesarArchivo(files[0]);
+    }
+  }
+
+  onFileSelected(event: any) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      this.procesarArchivo(files[0]);
+    }
+  }
+
+  procesarArchivo(file: File) {
+    this.analizandoArchivo = true;
+    this.errorMsg = '';
+    this.cdr.markForCheck();
+
+    if ('fecha' in this.datos) {
+      this.datos['fecha'] = new Date().toISOString().split('T')[0];
+    }
+    const nombreLimpio = file.name.replace(/\.[^/.]+$/, "");
+    this.titulo = nombreLimpio;
+
+    this.projectService.analizarArchivo(file).subscribe({
+      next: (res: any) => {
+        this.analizandoArchivo = false;
+        if (res.texto && 'contenido' in this.datos) {
+          this.datos['contenido'] = res.texto;
+        }
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        this.analizandoArchivo = false;
+        this.errorMsg = err.error?.error || 'Error al procesar el archivo. Intenta con otro formato o texto plano.';
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   ngOnInit() {
@@ -147,8 +221,12 @@ export class NuevaEntrada implements OnInit {
     this.config = CONFIGS[this.tipo] ?? CONFIGS['entrevistas'];
     // Inicializar datos
     this.config.campos.forEach((c) => (this.datos[c.key] = ''));
+    this.cdr.markForCheck();
     this.projectService.obtenerProyecto(this.proyectoId).subscribe({
-      next: (p) => { this.proyecto = p; },
+      next: (p) => { 
+        this.proyecto = p; 
+        this.cdr.markForCheck();
+      },
       error: () => {}
     });
   }
@@ -166,6 +244,7 @@ export class NuevaEntrada implements OnInit {
     }
     this.guardando = true;
     this.errorMsg = '';
+    this.cdr.markForCheck();
     this.projectService.crearEntrada({
       proyectoId: this.proyectoId,
       tipo: this.tipo,
@@ -174,11 +253,13 @@ export class NuevaEntrada implements OnInit {
     }).subscribe({
       next: () => {
         this.guardando = false;
+        this.cdr.markForCheck();
         this.router.navigate(['/app/proyecto', this.proyectoId, 'tecnicas', this.tipo]);
       },
       error: () => {
         this.guardando = false;
         this.errorMsg = 'Error al guardar la entrada. Intenta de nuevo.';
+        this.cdr.markForCheck();
       }
     });
   }

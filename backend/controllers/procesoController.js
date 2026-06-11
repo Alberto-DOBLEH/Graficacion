@@ -52,4 +52,33 @@ const eliminarAnalisis = (req, res) => {
     });
 };
 
-module.exports = { obtenerAnalisisPorProyecto, crearAnalisis, actualizarAnalisis, eliminarAnalisis };
+const analizarArchivoAnexo = async (req, res) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).json({ error: 'No se subió ningún archivo' });
+    }
+
+    const file = req.files.archivo;
+    let extractedText = '';
+
+    try {
+        const pdfParser = require('pdf-parse');
+        if (file.mimetype === 'application/pdf' || file.name.endsWith('.pdf')) {
+            const data = await pdfParser(file.data);
+            extractedText = data.text;
+        } else {
+            // Asumir texto plano (TXT, HTML, JSON, MD)
+            extractedText = file.data.toString('utf8');
+        }
+
+        if (!extractedText || !extractedText.trim()) {
+            return res.status(400).json({ error: 'El archivo está vacío o no contiene texto legible.' });
+        }
+
+        res.json({ texto: extractedText });
+    } catch (error) {
+        console.error('Error al analizar archivo:', error);
+        res.status(500).json({ error: error.message || 'Error al procesar el archivo' });
+    }
+};
+
+module.exports = { obtenerAnalisisPorProyecto, crearAnalisis, actualizarAnalisis, eliminarAnalisis, analizarArchivoAnexo };

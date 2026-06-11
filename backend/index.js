@@ -5,12 +5,15 @@ require('dotenv').config();
 // 1. Despertamos la conexión a la base de datos
 require('./db/config');
 
+const fileUpload = require('express-fileupload');
+
 // 2. Inicializamos Express
 const app = express();
 
 // 3. Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 // 4. Ruta de prueba
 app.get('/api/ping', (req, res) => {

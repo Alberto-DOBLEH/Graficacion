@@ -38,17 +38,50 @@
 .stat-val { display: block; font-size: 1.8rem; font-weight: 800; color: var(--accent); line-height: 1; }
 .stat-lbl { display: block; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px; }
 
-/* ── Action Bar ─────────────────────────── */
-.action-bar { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
-.btn-action {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 0.7rem 1.3rem; border: none; border-radius: 10px;
-  font-size: 0.9rem; font-weight: 700; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+/* ── Action Bar (Mini in Header) ────────── */
+.btn-action-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.45rem 0.9rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-.btn-action:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
-.btn-copiar { background: #6366f1; color: white; }
-.btn-descargar { background: #10b981; color: white; }
+.btn-action-mini mat-icon {
+  font-size: 1.05rem;
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.btn-action-mini:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.btn-action-mini:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-claude { background: #8b5cf6; color: white; }
+.btn-claude:hover:not(:disabled) { background: #7c3aed; }
+
+.btn-editar-prompt { background: #f59e0b; color: white; }
+.btn-editar-prompt:hover:not(:disabled) { background: #d97706; }
+
+.btn-copiar-prompt { background: #6366f1; color: white; }
+.btn-copiar-prompt:hover:not(:disabled) { background: #4f46e5; }
+
+.btn-descargar-txt { background: #10b981; color: white; }
+.btn-descargar-txt:hover:not(:disabled) { background: #059669; }
+
+.btn-descargar-pdf { background: #ef4444; color: white; }
+.btn-descargar-pdf:hover:not(:disabled) { background: #dc2626; }
 
 /* ── Prompt Area ────────────────────────── */
 .prompt-area {
@@ -88,8 +121,37 @@
 .tips-section ul { margin: 0; padding-left: 1.2rem; }
 .tips-section li { font-size: 0.85rem; color: #555; line-height: 1.8; }
 
+/* ── Edit Mode ──────────────────────────── */
+.btn-editar { background: #f59e0b; color: white; }
+.btn-pdf { background: #ef4444; color: white; }
+.btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.prompt-edit-container {
+  padding: 0;
+}
+.prompt-textarea {
+  width: 100%; box-sizing: border-box;
+  min-height: 450px; padding: 1.5rem;
+  background: #0f0f23; color: #e2e8f0;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  font-size: 0.82rem; line-height: 1.7;
+  border: none; outline: none; resize: vertical;
+}
+.prompt-textarea:focus {
+  box-shadow: inset 0 0 0 2px #8b5cf6;
+}
+.edit-actions {
+  display: flex; justify-content: flex-end; gap: 0.7rem;
+  padding: 1rem 1.5rem; background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+}
+.btn-cancelar-edit { background: #6b7280; color: white; }
+.btn-guardar-edit { background: #10b981; color: white; }
+
 /* ── Responsive ─────────────────────────── */
 @media (max-width: 700px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .action-bar { flex-direction: column; }
+  .prompt-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .header-actions { width: 100%; display: flex; flex-wrap: wrap; gap: 6px; }
+  .btn-action-mini { flex: 1; min-width: 80px; justify-content: center; }
 }

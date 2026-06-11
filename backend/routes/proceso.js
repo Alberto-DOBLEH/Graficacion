@@ -7,6 +7,8 @@ const { validarCampos } = require('../middleware/validadorMiddleware');
 
 router.use(verificarToken);
 
+router.post('/analizar-archivo', procesoController.analizarArchivoAnexo);
+
 router.get('/proyecto/:id_proyecto', [
     check('id_proyecto', 'El id_proyecto debe ser numérico').isInt(),
     validarCampos

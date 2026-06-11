@@ -39,6 +39,7 @@ export class ProyectoDetalle implements OnInit {
     { tipo: 'taller-jad', nombre: 'Taller JAD/RAD', descripcion: 'Sesiones grupales facilitadas para definir y priorizar requisitos', icono: 'groups', color: '#ec4899' },
     { tipo: 'prototipado', nombre: 'Prototipado', descripcion: 'Modelos visuales o funcionales para validar ideas con el cliente', icono: 'desktop_mac', color: '#3b82f6' },
     { tipo: 'casos-de-uso', nombre: 'Casos de Uso', descripcion: 'Escenarios de interacción entre actores y el sistema', icono: 'design_services', color: '#00e676' },
+    { tipo: 'anexos', nombre: 'Anexos', descripcion: 'Documentos complementarios, evidencias y archivos de soporte', icono: 'attach_file', color: '#0ea5e9' },
   ];
 
   ngOnInit() {

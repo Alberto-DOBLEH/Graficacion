@@ -115,3 +115,64 @@
 @media (max-width: 500px) {
   .diagrama-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Botón Editar en Header ──────────────── */
+.btn-editar {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: white; border: 1.5px solid #dbeafe; border-radius: 8px;
+  padding: 0.45rem 1rem; font-size: 0.8rem; font-weight: 700;
+  color: #1e3a8a; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-editar:hover {
+  background: #f0f4ff; border-color: #bfdbfe;
+  transform: translateY(-1px);
+}
+.btn-editar.active {
+  background: #ec4899; border-color: #ec4899; color: white;
+  box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);
+}
+
+/* ── Editor de código Textarea ───────────── */
+.code-textarea {
+  width: 100%; height: 260px;
+  padding: 1.2rem; margin: 0; box-sizing: border-box;
+  background: #1e1e2e; color: #cdd6f4;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  font-size: 0.85rem; line-height: 1.6;
+  border: none; outline: none; resize: vertical;
+  border-radius: 0 0 14px 14px;
+}
+.code-textarea:focus {
+  background: #181825;
+}
+
+/* ── Botones de acciones del editor ──────── */
+.btn-editor-action {
+  display: inline-flex; align-items: center;
+  border: none; border-radius: 6px;
+  padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.btn-editor-save {
+  background: #10b981; color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.btn-editor-save:hover {
+  background: #059669;
+  transform: translateY(-0.5px);
+}
+.btn-editor-save:disabled {
+  opacity: 0.6; cursor: not-allowed;
+}
+
+.btn-editor-restore {
+  background: #f3f4f6; color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+.btn-editor-restore:hover {
+  background: #e5e7eb; color: #1f2937;
+  transform: translateY(-0.5px);
+}
+.btn-editor-restore:disabled {
+  opacity: 0.6; cursor: not-allowed;
+}

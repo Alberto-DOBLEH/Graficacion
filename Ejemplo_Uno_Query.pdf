@@ -1,0 +1,613 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 4601
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+0 g
+42.5196850393700814 785.1970866141732586 Td
+(SQL QUERY - CONSULTA DE CONSOLIDACION DE PROYECTOS) Tj
+ET
+1.4173228346456694 w
+42.5196850393700814 751.1813385826770855 m
+552.7559055118110791 751.1813385826770855 l
+S
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0.082 0.396 0.753 rg
+42.5196850393700814 708.6616535433070112 Td
+(QUERY PRINCIPAL DE CONSOLIDACION DE PROYECTO) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 685.9844881889763428 Td
+(El siguiente query SQL permite recuperar toda la información almacenada en el sistema sobre un proyecto en una) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 670.3939370078740012 Td
+(sola consulta relacional, uniendo las tablas de Proyectos, Participantes asignados, Roles, Técnicas de Análisis) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 654.8033858267716596 Td
+(\(Cuestionarios, Entrevistas, Requerimientos\) y Prompts Generados.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 627.8742519685039269 Td
+(Consulta SQL:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 610.8663779527558972 Td
+(SELECT ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 595.2758267716535556 Td
+(    p.id_proyecto,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 579.6852755905511003 Td
+(    p.nombre AS proyecto_nombre,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 564.0947244094487587 Td
+(    p.descripcion AS proyecto_descripcion,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 548.5041732283464171 Td
+(    p.estado AS proyecto_estado,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 532.9136220472440755 Td
+(    p.fecha_creacion AS proyecto_fecha_creacion,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 517.3230708661417339 Td
+(    -- Datos de Participantes y sus Roles asignados) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 501.7325196850393354 Td
+(    part.nombre AS participante_nombre,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 486.1419685039369369 Td
+(    part.email AS participante_email,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 470.5514173228345953 Td
+(    r.nombre_rol AS participante_rol,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 454.9608661417322537 Td
+(    -- Técnicas de Análisis y Requerimientos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 439.3703149606298552 Td
+(    ar.id_analisis,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 423.7797637795275136 Td
+(    ar.tipo_metodo,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 408.1892125984251152 Td
+(    ar.contenido,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 392.5986614173227736 Td
+(    -- Diagramas Generados) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 377.0081102362204319 Td
+(    dg.tipo_diagrama,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 361.4175590551180335 Td
+(    dg.codigo_generado,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 345.8270078740156919 Td
+(    -- Prompt Maestro Final) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 330.2364566929132934 Td
+(    pf.contenido_prompt AS prompt_maestro) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 314.6459055118109518 Td
+(FROM Proyectos p) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 299.0553543307086102 Td
+(LEFT JOIN Proyecto_Participantes pp ON p.id_proyecto = pp.id_proyecto) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 283.4648031496062686 Td
+(LEFT JOIN Participantes part ON pp.id_participante = part.id_participante) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 267.8742519685038133 Td
+(LEFT JOIN Roles r ON pp.id_rol = r.id_rol) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 252.2837007874014716 Td
+(LEFT JOIN Analisis_Requerimientos ar ON p.id_proyecto = ar.id_proyecto) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 236.69314960629913 Td
+(LEFT JOIN Diagramas_Generados dg ON p.id_proyecto = dg.id_proyecto) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 221.1025984251967884 Td
+(LEFT JOIN Prompts_Finales pf ON p.id_proyecto = pf.id_proyecto) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 205.5120472440944468 Td
+(WHERE p.id_proyecto = 4;) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0.082 0.396 0.753 rg
+42.5196850393700814 150.2364566929132934 Td
+(EXPLICACION DE LA ESTRUCTURA DEL QUERY) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 127.559291338582625 Td
+(1. FROM Proyectos p) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 110.5514173228345953 Td
+(Establece el proyecto como la tabla principal \(p\) de la consulta.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 2251
+>>
+stream
+1.4173228346456694 w
+0 G
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 785.1970866141732586 Td
+(2. LEFT JOIN Proyecto_Participantes pp & LEFT JOIN Participantes part) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 768.1892125984252289 Td
+(Permite recuperar todos los integrantes asignados al proyecto. Se utiliza un LEFT JOIN para que el proyecto) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 752.5986614173227736 Td
+(aparezca en la lista incluso si aún no tiene participantes asignados.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 725.6695275590550409 Td
+(3. LEFT JOIN Roles r) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 708.6616535433070112 Td
+(Obtiene el nombre descriptivo del rol del participante asignado al proyecto \(ej. Administrador, Analista Líder,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 693.0711023622046696 Td
+(Cliente\).) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 666.1419685039369369 Td
+(4. LEFT JOIN Analisis_Requerimientos ar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 649.1340944881889072 Td
+(Trae todas las técnicas de elicitación y requerimientos guardados en formato JSON en la columna 'contenido' \(ej.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 633.5435433070865656 Td
+(entrevistas, cuestionarios, requerimientos funcionales, no funcionales y reglas de negocio\).) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 606.614409448818833 Td
+(5. LEFT JOIN Diagramas_Generados dg) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 589.6065354330708033 Td
+(Recupera la sintaxis Mermaid de los diagramas UML que han sido guardados o editados para el proyecto.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 562.6774015748030706 Td
+(6. LEFT JOIN Prompts_Finales pf) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 545.6695275590550409 Td
+(Une el Prompt Maestro generado para el proyecto.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0. g
+42.5196850393700814 518.7403937007873083 Td
+(7. WHERE p.id_proyecto = 4) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+42.5196850393700814 501.7325196850393354 Td
+(Filtra los registros para devolver únicamente los datos de la Taquería \(ID 4\).) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R ]
+/Count 2
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 7 0 R
+/F2 8 0 R
+/F3 9 0 R
+/F4 10 0 R
+/F5 11 0 R
+/F6 12 0 R
+/F7 13 0 R
+/F8 14 0 R
+/F9 15 0 R
+/F10 16 0 R
+/F11 17 0 R
+/F12 18 0 R
+/F13 19 0 R
+/F14 20 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+21 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20260610225631-07'00')
+>>
+endobj
+22 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 23
+0000000000 65535 f 
+0000007245 00000 n 
+0000009070 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000004805 00000 n 
+0000004942 00000 n 
+0000007308 00000 n 
+0000007433 00000 n 
+0000007563 00000 n 
+0000007696 00000 n 
+0000007834 00000 n 
+0000007958 00000 n 
+0000008087 00000 n 
+0000008219 00000 n 
+0000008355 00000 n 
+0000008483 00000 n 
+0000008610 00000 n 
+0000008739 00000 n 
+0000008872 00000 n 
+0000008974 00000 n 
+0000009320 00000 n 
+0000009406 00000 n 
+trailer
+<<
+/Size 23
+/Root 22 0 R
+/Info 21 0 R
+/ID [ <304EFABC78B2C28FE829DE20A1F85397> <304EFABC78B2C28FE829DE20A1F85397> ]
+>>
+startxref
+9510
+%%EOF

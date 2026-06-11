@@ -55,32 +55,62 @@
     </div>
   </div>
 
-  <!-- Action Buttons -->
-  <div class="action-bar" *ngIf="!cargando && !errorMsg">
-    <button class="btn-action btn-claude" style="background: #8b5cf6; color: white;" (click)="generarConIA()" [disabled]="generandoIA">
-      <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">{{ generandoIA ? 'autorenew' : 'psychology' }}</mat-icon>
-      {{ generandoIA ? 'Claude pensando...' : 'Generar con Claude AI' }}
-    </button>
-    <button class="btn-action btn-copiar" (click)="copiar()">
-      <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">{{ copiado ? 'check' : 'content_copy' }}</mat-icon>
-      {{ copiado ? '¡Copiado!' : 'Copiar Prompt' }}
-    </button>
-    <button class="btn-action btn-descargar" (click)="descargar()">
-      <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">download</mat-icon>
-      Descargar .txt
-    </button>
-  </div>
-
   <!-- Prompt Output -->
   <div class="prompt-area" *ngIf="!cargando && !errorMsg">
     <div class="prompt-header">
       <div class="prompt-title">
         <mat-icon style="font-size: 1.3rem; width: 1.3rem; height: 1.3rem; color: #f59e0b;">auto_awesome</mat-icon>
         <h2>Especificación Generada</h2>
+        <span class="prompt-chars" style="margin-left: 8px;">{{ promptGenerado.length | number }} caracteres</span>
       </div>
-      <span class="prompt-chars">{{ promptGenerado.length | number }} caracteres</span>
+      
+      <!-- Action Buttons Moved to Header -->
+      <div class="header-actions" style="display: flex; gap: 8px;">
+        <button class="btn-action-mini btn-claude" (click)="generarConIA()" [disabled]="generandoIA || editandoPrompt">
+          <mat-icon>{{ generandoIA ? 'autorenew' : 'psychology' }}</mat-icon>
+          <span>{{ generandoIA ? 'Pensando...' : 'Generar' }}</span>
+        </button>
+        <button class="btn-action-mini btn-editar-prompt" (click)="iniciarEdicion()" *ngIf="!editandoPrompt && promptId">
+          <mat-icon>edit</mat-icon>
+          <span>Editar</span>
+        </button>
+        <button class="btn-action-mini btn-copiar-prompt" (click)="copiar()" [disabled]="editandoPrompt">
+          <mat-icon>{{ copiado ? 'check' : 'content_copy' }}</mat-icon>
+          <span>{{ copiado ? 'Copiado' : 'Copiar' }}</span>
+        </button>
+        <button class="btn-action-mini btn-descargar-txt" (click)="descargar()" [disabled]="editandoPrompt">
+          <mat-icon>download</mat-icon>
+          <span>TXT</span>
+        </button>
+        <button class="btn-action-mini btn-descargar-pdf" (click)="exportarPDF()" [disabled]="editandoPrompt">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <span>PDF</span>
+        </button>
+      </div>
     </div>
-    <pre class="prompt-output">{{ promptGenerado }}</pre>
+
+    <!-- Modo lectura -->
+    <pre class="prompt-output" *ngIf="!editandoPrompt">{{ promptGenerado }}</pre>
+
+    <!-- Modo edición -->
+    <div class="prompt-edit-container" *ngIf="editandoPrompt">
+      <textarea
+        class="prompt-textarea"
+        [(ngModel)]="promptGenerado"
+        rows="25"
+        placeholder="Edita el contenido del prompt..."
+      ></textarea>
+      <div class="edit-actions">
+        <button class="btn-action btn-cancelar-edit" (click)="cancelarEdicion()">
+          <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">close</mat-icon>
+          Cancelar
+        </button>
+        <button class="btn-action btn-guardar-edit" (click)="guardarCambios()" [disabled]="guardandoPrompt">
+          <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">{{ guardandoPrompt ? 'autorenew' : 'save' }}</mat-icon>
+          {{ guardandoPrompt ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Tips -->
@@ -91,7 +121,7 @@
       <li>Define <strong>casos de uso</strong> para documentar los flujos del sistema</li>
       <li>Registra <strong>entrevistas</strong> y <strong>observaciones</strong> para incluir hallazgos reales</li>
       <li>Usa el prompt con ChatGPT, Claude, Gemini u otro LLM para generar código</li>
-      <li>Descarga el archivo .txt para compartirlo con tu equipo</li>
+      <li>Descarga el archivo .txt o .pdf para compartirlo con tu equipo</li>
     </ul>
   </div>
 </div>

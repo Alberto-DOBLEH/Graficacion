@@ -32,7 +32,6 @@
 .stat-card {
   background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem 1.2rem;
   display: flex; align-items: center; gap: 0.8rem;
-  border-left: 4px solid transparent;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 .stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
@@ -84,6 +83,20 @@
   background: white; border-radius: 14px; width: 95%; max-width: 640px;
   max-height: 88vh; overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-form::-webkit-scrollbar,
+.modal-form *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+.modal-form,
+.modal-form * {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 .modal-header {
@@ -132,11 +145,17 @@
 .req-card {
   background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1.2rem;
   position: relative;
-  border-left: 4px solid var(--accent);
 }
 .req-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
 
-.req-card-header { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.req-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  padding-right: 80px;
+}
 .req-codigo {
   padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.78rem;
   font-weight: 800; font-family: monospace; letter-spacing: 0.5px;

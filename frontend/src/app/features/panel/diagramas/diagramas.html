@@ -55,11 +55,20 @@
         <span class="render-badge" [style.background]="getDiagramaInfo().color + '22'" [style.color]="getDiagramaInfo().color">
           {{ requerimientos.length }} requerimientos
         </span>
+        <span class="render-badge personalizado-badge" *ngIf="esPersonalizado" style="background: #e0f2fe; color: #0369a1; font-weight: bold; margin-left: 6px; border: 1px solid #bae6fd;">
+          Personalizado
+        </span>
       </div>
-      <button class="btn-copiar" (click)="copiarCodigo()" title="Copiar código Mermaid">
-        <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">content_copy</mat-icon>
-        Copiar código
-      </button>
+      <div class="header-actions" style="display: flex; gap: 8px;">
+        <button class="btn-editar" [class.active]="modoEdicion" (click)="modoEdicion = !modoEdicion" title="Editar código Mermaid">
+          <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">edit</mat-icon>
+          {{ modoEdicion ? 'Ver Diagrama' : 'Editar Diseño' }}
+        </button>
+        <button class="btn-copiar" (click)="copiarCodigo()" title="Copiar código Mermaid">
+          <mat-icon style="font-size: 1.1rem; width: 1.1rem; height: 1.1rem;">content_copy</mat-icon>
+          Copiar código
+        </button>
+      </div>
     </div>
 
     <div class="render-body">
@@ -71,13 +80,34 @@
       </div>
     </div>
 
-    <!-- Mermaid Source Code -->
-    <div class="code-section">
+    <!-- Mermaid Source Code (Read-only) -->
+    <div class="code-section" *ngIf="!modoEdicion">
       <div class="code-header">
         <mat-icon style="font-size: 1rem; width: 1rem; height: 1rem; color: #888;">code</mat-icon>
-        <span>Código Mermaid</span>
+        <span>Código Mermaid (Lectura)</span>
       </div>
       <pre class="code-block">{{ codigoMermaid }}</pre>
+    </div>
+
+    <!-- Mermaid Source Code (Editable) -->
+    <div class="code-section editor-mode" *ngIf="modoEdicion">
+      <div class="code-header editor-header" style="display: flex; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <mat-icon style="font-size: 1rem; width: 1rem; height: 1rem; color: #ec4899;">edit</mat-icon>
+          <span>Editor de Código (Edición en vivo)</span>
+        </div>
+        <div class="editor-actions" style="display: flex; gap: 8px; margin-left: auto;">
+          <button class="btn-editor-action btn-editor-restore" *ngIf="esPersonalizado" (click)="restaurarOriginal()" [disabled]="guardando">
+            <mat-icon style="font-size: 0.95rem; width: 0.95rem; height: 0.95rem; vertical-align: middle; margin-right: 4px;">restart_alt</mat-icon>
+            Restaurar Automático
+          </button>
+          <button class="btn-editor-action btn-editor-save" (click)="guardarDiagrama()" [disabled]="guardando">
+            <mat-icon style="font-size: 0.95rem; width: 0.95rem; height: 0.95rem; vertical-align: middle; margin-right: 4px;">save</mat-icon>
+            {{ guardando ? 'Guardando...' : 'Guardar Diseño' }}
+          </button>
+        </div>
+      </div>
+      <textarea class="code-textarea" [(ngModel)]="codigoMermaid" (ngModelChange)="onCodeChange()" placeholder="Escribe código Mermaid válido aquí..."></textarea>
     </div>
   </div>
 

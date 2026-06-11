@@ -183,7 +183,13 @@ export class ProjectService {
       this.getAuthHeaders()
     ).pipe(
       map(res => res
-        .map(r => ({ ...r.contenido, id: r.id_analisis } as Requerimiento))
+        .map(r => {
+          let contenido: any = r.contenido;
+          if (typeof contenido === 'string') {
+            try { contenido = JSON.parse(contenido); } catch { contenido = {}; }
+          }
+          return { ...contenido, id: r.id_analisis } as Requerimiento;
+        })
         .filter(r => r.tipo === tipo)
       )
     );
@@ -194,7 +200,13 @@ export class ProjectService {
       `${this.apiUrl}/analisis/proyecto/${id_proyecto}`,
       this.getAuthHeaders()
     ).pipe(
-      map(res => res.map(r => ({ ...r.contenido, id: r.id_analisis } as Requerimiento)))
+      map(res => res.map(r => {
+        let contenido: any = r.contenido;
+        if (typeof contenido === 'string') {
+          try { contenido = JSON.parse(contenido); } catch { contenido = {}; }
+        }
+        return { ...contenido, id: r.id_analisis } as Requerimiento;
+      }))
     );
   }
 
@@ -253,6 +265,21 @@ export class ProjectService {
     );
   }
 
+  actualizarDiagrama(id: number | string, diagrama: Partial<Diagrama>): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/diagramas/${id}`,
+      diagrama,
+      this.getAuthHeaders()
+    );
+  }
+
+  eliminarDiagrama(id: number | string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/diagramas/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
   // --- PROMPTS ---
   obtenerPrompts(id_proyecto: number | string): Observable<Prompt[]> {
     return this.http.get<Prompt[]>(
@@ -269,10 +296,28 @@ export class ProjectService {
     );
   }
 
+  actualizarPrompt(id_prompt: number | string, contenido_prompt: string): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/prompts/${id_prompt}`,
+      { contenido_prompt },
+      this.getAuthHeaders()
+    );
+  }
+
   generarPromptIA(id_proyecto: number | string): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/prompts/generar/${id_proyecto}`,
       {},
+      this.getAuthHeaders()
+    );
+  }
+
+  analizarArchivo(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('archivo', file);
+    return this.http.post(
+      `${this.apiUrl}/analisis/analizar-archivo`,
+      formData,
       this.getAuthHeaders()
     );
   }

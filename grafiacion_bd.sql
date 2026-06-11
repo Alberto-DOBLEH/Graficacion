@@ -17,11 +17,14 @@
 SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
 SET @@SESSION.SQL_LOG_BIN= 0;
 
+CREATE DATABASE IF NOT EXISTS `graficacion`;
+USE `graficacion`;
+
 --
 -- GTID state at the beginning of the backup 
 --
 
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '807f7920-04bc-11f1-a1c3-e6d0b4b50cfd:1-20';
+-- SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '807f7920-04bc-11f1-a1c3-e6d0b4b50cfd:1-20';
 
 --
 -- Table structure for table `Analisis_Requerimientos`
@@ -39,7 +42,7 @@ CREATE TABLE `Analisis_Requerimientos` (
   PRIMARY KEY (`id_analisis`),
   KEY `id_proyecto` (`id_proyecto`),
   CONSTRAINT `Analisis_Requerimientos_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `Proyectos` (`id_proyecto`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +70,7 @@ CREATE TABLE `Diagramas_Generados` (
   PRIMARY KEY (`id_diagrama`),
   KEY `id_proyecto` (`id_proyecto`),
   CONSTRAINT `Diagramas_Generados_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `Proyectos` (`id_proyecto`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +97,7 @@ CREATE TABLE `Participantes` (
   `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_participante`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +106,7 @@ CREATE TABLE `Participantes` (
 
 LOCK TABLES `Participantes` WRITE;
 /*!40000 ALTER TABLE `Participantes` DISABLE KEYS */;
-INSERT INTO `Participantes` VALUES (1,'Alberto Hernandez','alberto@gmail.com','$2b$10$NoB8DjbH9FtPiazTkulueujKwkF7bwVuDqPXCReTogS7BPNBsrElO','2026-06-08 14:58:57'),(2,'Cristhian Marquez','cris@gmail.com','$2b$10$84KNMMX2Vbi6ib7ZmMgyEe6GrjgO/G8lOMP.n1KToqbPF07xAnYc.','2026-06-08 15:34:02');
+INSERT INTO `Participantes` VALUES (1,'Alberto Hernandez','alberto@gmail.com','$2b$10$NoB8DjbH9FtPiazTkulueujKwkF7bwVuDqPXCReTogS7BPNBsrElO','2026-06-08 14:58:57'),(2,'Cristhian Marquez','cris@gmail.com','$2b$10$84KNMMX2Vbi6ib7ZmMgyEe6GrjgO/G8lOMP.n1KToqbPF07xAnYc.','2026-06-08 15:34:02'),(3,'Admin','admin@gmail.com','$2b$10$1JPC0hOkoGgCaBY0jplujuAvF0aXrxzWqGhDRalmFFhgnwn9Sds/u','2026-06-10 00:00:00');
 /*!40000 ALTER TABLE `Participantes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,7 +125,7 @@ CREATE TABLE `Prompts_Finales` (
   PRIMARY KEY (`id_prompt`),
   KEY `id_proyecto` (`id_proyecto`),
   CONSTRAINT `Prompts_Finales_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `Proyectos` (`id_proyecto`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +154,7 @@ CREATE TABLE `Proyecto_Participantes` (
   CONSTRAINT `Proyecto_Participantes_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `Proyectos` (`id_proyecto`) ON DELETE CASCADE,
   CONSTRAINT `Proyecto_Participantes_ibfk_2` FOREIGN KEY (`id_participante`) REFERENCES `Participantes` (`id_participante`) ON DELETE CASCADE,
   CONSTRAINT `Proyecto_Participantes_ibfk_3` FOREIGN KEY (`id_rol`) REFERENCES `Roles` (`id_rol`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +181,7 @@ CREATE TABLE `Proyectos` (
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `id_participante` int DEFAULT NULL,
   PRIMARY KEY (`id_proyecto`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,7 +206,7 @@ CREATE TABLE `Roles` (
   `nombre_rol` varchar(50) NOT NULL,
   PRIMARY KEY (`id_rol`),
   UNIQUE KEY `nombre_rol` (`nombre_rol`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

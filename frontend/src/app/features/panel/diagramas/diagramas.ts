@@ -1,9 +1,10 @@
-import { Component, inject, OnInit, AfterViewChecked, ElementRef } from '@angular/core';
+import { Component, inject, OnInit, AfterViewChecked, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { ProjectService, Proyecto, Requerimiento, EntradaTecnica } from '../../../core/services/project.service';
+import { ProjectService, Proyecto, Requerimiento, EntradaTecnica, Diagrama } from '../../../core/services/project.service';
 
 declare var mermaid: any;
 
@@ -18,7 +19,7 @@ interface DiagramaInfo {
 @Component({
   selector: 'app-diagramas',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule],
+  imports: [CommonModule, FormsModule, RouterLink, MatIconModule],
   templateUrl: './diagramas.html',
   styleUrl: './diagramas.css',
 })
@@ -27,6 +28,7 @@ export class Diagramas implements OnInit, AfterViewChecked {
   private router = inject(Router);
   private ps = inject(ProjectService);
   private el = inject(ElementRef);
+  private cdr = inject(ChangeDetectorRef);
 
   proyectoId = '';
   proyecto: Proyecto | undefined;
@@ -48,25 +50,37 @@ export class Diagramas implements OnInit, AfterViewChecked {
   cargando = true;
   errorMsg = '';
 
+  // Custom diagram properties
+  diagramasGuardados: Diagrama[] = [];
+  diagramaGuardadoId: number | null = null;
+  esPersonalizado = false;
+  guardando = false;
+  modoEdicion = false;
+
   ngOnInit() {
     this.proyectoId = this.route.snapshot.paramMap.get('id') ?? '';
+    this.cdr.markForCheck();
     
     forkJoin({
       proyecto: this.ps.obtenerProyecto(this.proyectoId),
       requerimientos: this.ps.getRequerimientos(this.proyectoId),
-      entradas: this.ps.getTodasLasEntradas(this.proyectoId)
+      entradas: this.ps.getTodasLasEntradas(this.proyectoId),
+      diagramasGuardados: this.ps.obtenerDiagramas(this.proyectoId)
     }).subscribe({
       next: (res) => {
         this.proyecto = res.proyecto;
         this.requerimientos = res.requerimientos;
         this.entradas = res.entradas;
+        this.diagramasGuardados = res.diagramasGuardados || [];
         this.cargando = false;
         this.cargarMermaid();
         this.generarDiagrama();
+        this.cdr.markForCheck();
       },
       error: () => {
         this.cargando = false;
         this.errorMsg = 'Error al cargar los datos del proyecto.';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -101,11 +115,12 @@ export class Diagramas implements OnInit, AfterViewChecked {
       const { svg } = await mermaid.render('mermaid-svg-' + Date.now(), this.codigoMermaid);
       container.innerHTML = svg;
     } catch (e) {
-      container.innerHTML = '<p style="color:#ef4444;text-align:center;">Error al renderizar el diagrama. Revisa los datos del proyecto.</p>';
+      container.innerHTML = '<p style="color:#ef4444;text-align:center;padding:1.5rem;font-weight:600;">Error de sintaxis en el código del diagrama. Revisa la estructura de Mermaid.</p>';
     }
   }
 
   seleccionarDiagrama(key: string) {
+    this.modoEdicion = false;
     this.diagramaActual = key;
     this.generarDiagrama();
   }
@@ -115,14 +130,117 @@ export class Diagramas implements OnInit, AfterViewChecked {
   }
 
   generarDiagrama() {
-    switch (this.diagramaActual) {
-      case 'casos-uso': this.codigoMermaid = this.generarCasosDeUso(); break;
-      case 'clases': this.codigoMermaid = this.generarClases(); break;
-      case 'secuencia': this.codigoMermaid = this.generarSecuencia(); break;
-      case 'actividades': this.codigoMermaid = this.generarActividades(); break;
-      case 'er': this.codigoMermaid = this.generarER(); break;
+    // Buscar si hay un código personalizado guardado para este tipo de diagrama
+    const guardado = this.diagramasGuardados.find(d => d.tipo_diagrama === this.diagramaActual);
+    if (guardado) {
+      this.codigoMermaid = guardado.codigo_generado;
+      this.diagramaGuardadoId = guardado.id_diagrama ?? null;
+      this.esPersonalizado = true;
+    } else {
+      this.diagramaGuardadoId = null;
+      this.esPersonalizado = false;
+      switch (this.diagramaActual) {
+        case 'casos-uso': this.codigoMermaid = this.generarCasosDeUso(); break;
+        case 'clases': this.codigoMermaid = this.generarClases(); break;
+        case 'secuencia': this.codigoMermaid = this.generarSecuencia(); break;
+        case 'actividades': this.codigoMermaid = this.generarActividades(); break;
+        case 'er': this.codigoMermaid = this.generarER(); break;
+      }
     }
     this.renderPending = true;
+  }
+
+  onCodeChange() {
+    this.renderPending = true;
+    this.cdr.markForCheck();
+  }
+
+  guardarDiagrama() {
+    if (!this.codigoMermaid.trim()) {
+      alert('El código del diagrama no puede estar vacío.');
+      return;
+    }
+    this.guardando = true;
+    this.errorMsg = '';
+    this.cdr.markForCheck();
+
+    const payload: Partial<Diagrama> = {
+      id_proyecto: Number(this.proyectoId),
+      tipo_diagrama: this.diagramaActual,
+      codigo_generado: this.codigoMermaid.trim()
+    };
+
+    if (this.diagramaGuardadoId) {
+      this.ps.actualizarDiagrama(this.diagramaGuardadoId, payload).subscribe({
+        next: () => {
+          this.guardando = false;
+          const idx = this.diagramasGuardados.findIndex(d => d.id_diagrama === this.diagramaGuardadoId);
+          if (idx !== -1) {
+            this.diagramasGuardados[idx].codigo_generado = this.codigoMermaid;
+          }
+          this.esPersonalizado = true;
+          this.modoEdicion = false;
+          this.cdr.markForCheck();
+          alert('Diagrama personalizado actualizado con éxito.');
+        },
+        error: () => {
+          this.guardando = false;
+          this.errorMsg = 'Error al actualizar el diagrama personalizado.';
+          this.cdr.markForCheck();
+        }
+      });
+    } else {
+      this.ps.guardarDiagrama(payload).subscribe({
+        next: (res) => {
+          this.guardando = false;
+          this.diagramaGuardadoId = res.id_diagrama;
+          this.diagramasGuardados.push({
+            id_diagrama: res.id_diagrama,
+            id_proyecto: Number(this.proyectoId),
+            tipo_diagrama: this.diagramaActual,
+            codigo_generado: this.codigoMermaid
+          });
+          this.esPersonalizado = true;
+          this.modoEdicion = false;
+          this.cdr.markForCheck();
+          alert('Diagrama personalizado guardado con éxito.');
+        },
+        error: () => {
+          this.guardando = false;
+          this.errorMsg = 'Error al guardar el diagrama personalizado.';
+          this.cdr.markForCheck();
+        }
+      });
+    }
+  }
+
+  restaurarOriginal() {
+    if (confirm('¿Estás seguro de que deseas eliminar tu versión personalizada y volver al diseño automático?')) {
+      if (this.diagramaGuardadoId) {
+        this.guardando = true;
+        this.cdr.markForCheck();
+        this.ps.eliminarDiagrama(this.diagramaGuardadoId).subscribe({
+          next: () => {
+            this.diagramasGuardados = this.diagramasGuardados.filter(d => d.id_diagrama !== this.diagramaGuardadoId);
+            this.diagramaGuardadoId = null;
+            this.esPersonalizado = false;
+            this.modoEdicion = false;
+            this.guardando = false;
+            this.generarDiagrama();
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.guardando = false;
+            this.errorMsg = 'Error al eliminar el diagrama personalizado.';
+            this.cdr.markForCheck();
+          }
+        });
+      } else {
+        this.modoEdicion = false;
+        this.generarDiagrama();
+        this.cdr.markForCheck();
+      }
+    }
   }
 
   private getActoresUnicos(): string[] {

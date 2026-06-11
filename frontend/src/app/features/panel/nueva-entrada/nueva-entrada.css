@@ -100,3 +100,56 @@
 }
 .btn-guardar:hover:not(:disabled) { filter: brightness(0.9); }
 .btn-guardar:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Zona de Carga (Drag & Drop) ──────────── */
+.upload-zone {
+  border: 2px dashed #94a3b8;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  padding: 1.8rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: #0ea5e9;
+  background-color: #f0f9ff;
+}
+
+.upload-icon {
+  font-size: 2.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #64748b;
+}
+
+.upload-zone:hover .upload-icon, .upload-zone.dragover .upload-icon {
+  color: #0ea5e9;
+}
+
+.upload-text {
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.upload-subtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.analizando-text {
+  color: #0284c7;
+  font-weight: 600;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,13 +16,18 @@ export class Requerimientos implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private ps = inject(ProjectService);
+  private cdr = inject(ChangeDetectorRef);
 
   proyectoId = '';
   proyecto: Proyecto | undefined;
-  requerimientos: Requerimiento[] = [];
+  todosLosRequerimientos: Requerimiento[] = [];
   tabActual: 'funcional' | 'no-funcional' | 'regla-negocio' = 'funcional';
   mostrarFormulario = false;
   editando: Requerimiento | null = null;
+
+  get requerimientosFiltrados(): Requerimiento[] {
+    return this.todosLosRequerimientos.filter(r => r.tipo === this.tabActual);
+  }
 
   // Form fields
   codigo = '';
@@ -45,26 +50,35 @@ export class Requerimientos implements OnInit {
   ];
 
   ngOnInit() {
-    this.proyectoId = this.route.snapshot.paramMap.get('id') ?? '';
-    this.ps.obtenerProyecto(this.proyectoId).subscribe({
-      next: (p) => {
-        this.proyecto = p;
-        this.cargar();
-      },
-      error: () => this.router.navigate(['/app/proyectos'])
+    this.route.paramMap.subscribe(params => {
+      this.proyectoId = params.get('id') ?? '';
+      this.cargando = true;
+      this.cdr.markForCheck();
+
+      this.ps.obtenerProyecto(this.proyectoId).subscribe({
+        next: (p) => {
+          this.proyecto = p;
+          this.cargar();
+          this.cdr.markForCheck();
+        },
+        error: () => this.router.navigate(['/app/proyectos'])
+      });
     });
   }
 
   cargar() {
     this.cargando = true;
-    this.ps.getRequerimientosPorTipo(this.proyectoId, this.tabActual).subscribe({
+    this.cdr.markForCheck();
+    this.ps.getRequerimientos(this.proyectoId).subscribe({
       next: (reqs) => {
-        this.requerimientos = reqs;
+        this.todosLosRequerimientos = reqs;
         this.cargando = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.errorMsg = 'Error al cargar requerimientos.';
         this.cargando = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -72,7 +86,6 @@ export class Requerimientos implements OnInit {
   cambiarTab(tab: 'funcional' | 'no-funcional' | 'regla-negocio') {
     this.tabActual = tab;
     this.cerrarFormulario();
-    this.cargar();
   }
 
   getTabInfo() {
@@ -126,6 +139,7 @@ export class Requerimientos implements OnInit {
     }
     this.guardando = true;
     this.errorMsg = '';
+    this.cdr.markForCheck();
 
     if (this.editando) {
       this.ps.actualizarRequerimiento({
@@ -144,10 +158,12 @@ export class Requerimientos implements OnInit {
           this.guardando = false;
           this.cerrarFormulario();
           this.cargar();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.guardando = false;
           this.errorMsg = 'Error al actualizar requerimiento';
+          this.cdr.markForCheck();
         }
       });
     } else {
@@ -168,10 +184,12 @@ export class Requerimientos implements OnInit {
           this.guardando = false;
           this.cerrarFormulario();
           this.cargar();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.guardando = false;
           this.errorMsg = 'Error al crear requerimiento';
+          this.cdr.markForCheck();
         }
       });
     }
@@ -180,7 +198,10 @@ export class Requerimientos implements OnInit {
   eliminar(id: string) {
     if (confirm('¿Eliminar este requerimiento?')) {
       this.ps.eliminarRequerimiento(id).subscribe({
-        next: () => this.cargar(),
+        next: () => {
+          this.cargar();
+          this.cdr.markForCheck();
+        },
         error: () => alert('Error al eliminar')
       });
     }
@@ -195,6 +216,6 @@ export class Requerimientos implements OnInit {
   }
 
   contarPorTipo(tipo: string): number {
-    return this.requerimientos.filter(r => r.tipo === tipo).length;
+    return this.todosLosRequerimientos.filter(r => r.tipo === tipo).length;
   }
 }

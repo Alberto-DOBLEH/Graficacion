@@ -23,7 +23,7 @@
 
   <!-- Stats Cards -->
   <div class="stats-row">
-    <div class="stat-card" *ngFor="let tab of tabs" [style.border-left-color]="tab.color">
+    <div class="stat-card" *ngFor="let tab of tabs">
       <mat-icon [style.color]="tab.color" style="font-size: 1.5rem; width: 1.5rem; height: 1.5rem;">{{ tab.icono }}</mat-icon>
       <div class="stat-info">
         <span class="stat-number" [style.color]="tab.color">{{ contarPorTipo(tab.key) }}</span>
@@ -148,8 +148,8 @@
   </div>
 
   <!-- Lista de requerimientos -->
-  <div class="req-list" *ngIf="!cargando && requerimientos.length > 0; else vacioTemplate">
-    <div class="req-card" *ngFor="let r of requerimientos" [style.--accent]="getTabInfo().color">
+  <div class="req-list" *ngIf="!cargando && requerimientosFiltrados.length > 0; else vacioTemplate">
+    <div class="req-card" *ngFor="let r of requerimientosFiltrados">
       <div class="req-card-header">
         <div class="req-codigo" [style.background]="getTabInfo().color + '22'" [style.color]="getTabInfo().color">{{ r.codigo }}</div>
         <h3 class="req-titulo">{{ r.titulo }}</h3>

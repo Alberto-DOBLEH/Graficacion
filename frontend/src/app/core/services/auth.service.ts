@@ -20,20 +20,6 @@ export class AuthService {
   }
 
   login(email: string, pass: string): Observable<any> {
-    if ((email === 'admin@gmail.com' || email === 'admingmail.com') && pass === '123456') {
-      const session = {
-        id: 1,
-        nombre: 'Administrador',
-        email: email,
-        token: 'fake-jwt-token-testing'
-      };
-      this.guardarSesion(session);
-      return of({
-        mensaje: 'Bienvenido',
-        token: session.token,
-        usuario: { id: session.id, nombre: session.nombre }
-      });
-    }
 
     return this.http.post<any>(`${API_URL}/auth/login`, {
       email: email,

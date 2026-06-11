@@ -20,6 +20,7 @@ const TECNICAS_INFO: Record<string, TecnicaInfo> = {
   'taller-jad': { nombre: 'Taller JAD/RAD', icono: 'groups', color: '#ec4899', descripcion: 'Sesiones grupales facilitadas' },
   prototipado: { nombre: 'Prototipado', icono: 'desktop_mac', color: '#3b82f6', descripcion: 'Modelos visuales/funcionales' },
   'casos-de-uso': { nombre: 'Casos de Uso', icono: 'design_services', color: '#00e676', descripcion: 'Escenarios de interacción' },
+  'anexos': { nombre: 'Anexos', icono: 'attach_file', color: '#0ea5e9', descripcion: 'Documentos complementarios y evidencias' },
 };
 
 @Component({
@@ -80,6 +81,7 @@ export class TecnicasLista implements OnInit {
       next: (entradas) => {
         this.entradas = entradas;
         this.filtrar();
+        this.cdr.markForCheck();
       }
     });
   }
@@ -94,7 +96,10 @@ export class TecnicasLista implements OnInit {
   eliminar(id: string | number) {
     if (confirm('¿Eliminar esta entrada?')) {
       this.projectService.eliminarEntrada(id).subscribe({
-        next: () => this.cargarEntradas()
+        next: () => {
+          this.cargarEntradas();
+          this.cdr.markForCheck();
+        }
       });
     }
   }
